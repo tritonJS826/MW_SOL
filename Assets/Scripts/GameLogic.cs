@@ -79,27 +79,33 @@ public class GameLogic: MonoBehaviour
     {
         if (_currentSelectedQuestion != null && _currentSelectedQuestion.QuestionData.CorrectAnswer.Equals(answer, StringComparison.OrdinalIgnoreCase))
         {
+            OnQuestionExpired(_currentSelectedQuestion);
             Debug.Log("Correct Answer!");
             
         }
         else
         {
             Debug.Log("Incorrect Answer!");
-            //OnQuestionExpired();
+            OnQuestionExpired(_currentSelectedQuestion);
         }
         
         // Optionally, you can move to the next question after submitting an answer
         OnNextQuestion();
     }
     
-    private void OnQuestionExpired()
+    private void OnQuestionExpired(QuestionGameObject questionGO)
     {
-        if (_currentSelectedQuestion != null && _currentSelectedQuestion.QuestionData == _activeQuestions[0].QuestionData)
+        if (questionGO == null)
+        {
+            Debug.LogError("QuestionGameObject is null in OnQuestionExpired");
+            return;
+        }
+        
+        if (_currentSelectedQuestion == questionGO)
         {
             UpdateCurrentSelectedQuestion(null);
         }
-        
-        _activeQuestions.RemoveAt(0);
+        _activeQuestions.Remove(questionGO);
         
         if (_activeQuestions.Count > 0)
         {
@@ -109,5 +115,7 @@ public class GameLogic: MonoBehaviour
         {
             OnQuestionSelectedAction?.Invoke(null);
         }
+        questionGO.StopAllTwens();
+        Destroy(questionGO.gameObject);
     }
 }

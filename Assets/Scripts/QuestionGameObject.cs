@@ -6,11 +6,11 @@ public class QuestionGameObject : MonoBehaviour
     [SerializeField] private GameObject selectedVisual;
     [SerializeField] private QuestionSO questionData;
     
-    private TweenCallback onCompleteCallback;
+    private TweenCallback<QuestionGameObject> onCompleteCallback;
 
     public QuestionSO QuestionData => questionData;
 
-    public void Initialize(QuestionSO question, TweenCallback onComplete = null)
+    public void Initialize(QuestionSO question, TweenCallback<QuestionGameObject> onComplete = null)
     {
         questionData = question;
         onCompleteCallback = onComplete;
@@ -20,14 +20,7 @@ public class QuestionGameObject : MonoBehaviour
     {
         transform.DOLocalMove(targetPosition, questionData.SpeedTime, false)
             .SetEase(Ease.Linear)
-            .OnComplete(() =>
-            {
-                if (onCompleteCallback != null)
-                {
-                    onCompleteCallback.Invoke();
-                }
-                Destroy(gameObject);
-            });
+            .OnComplete(() => { onCompleteCallback?.Invoke(this); });
     }
 
 
@@ -38,6 +31,12 @@ public class QuestionGameObject : MonoBehaviour
             selectedVisual.SetActive(isSelected);
         }
         
+    }
+
+    public void StopAllTwens()
+    {
+        DOTween.Kill(transform);
+        onCompleteCallback = null;
     }
     
 

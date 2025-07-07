@@ -1,6 +1,5 @@
 using System.Runtime.InteropServices;
 using DG.Tweening;
-using NUnit.Framework.Internal;
 using TMPro;
 using UnityEngine;
 
@@ -30,8 +29,22 @@ public class UI : MonoBehaviour
         timerText.color = Color.red;
         timerText.text = str;
     }
+    
+    public void JsonTest(string json)
+    {
+        json = JsonUtility.FromJson(json, typeof(string)) as string;
+        if (string.IsNullOrEmpty(json))
+        {
+            timerText.color = Color.red;
+            timerText.text = "Invalid JSON";
+            return;
+        }
+        
+        timerText.color = Color.green;
+        timerText.text = json;
+    }
 
-// 
+
     
     [DllImport("__Internal")]
     private static extern void GameStart (string userName, int score);
