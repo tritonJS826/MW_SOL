@@ -1,5 +1,5 @@
 mergeInto(LibraryManager.library, {
-    function _GameStart (userName, score) {
+    _GameStart: function(userName, score) {
         window.dispatchReactUnityEvent("GameStart", UTF8ToString(userName), score);
     },
 });
