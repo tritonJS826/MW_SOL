@@ -1,21 +1,50 @@
+using System.Runtime.InteropServices;
 using DG.Tweening;
+using NUnit.Framework.Internal;
 using TMPro;
 using UnityEngine;
 
 public class UI : MonoBehaviour
 {
+    [SerializeField] private GameLogic gameLogic;
+
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private TMP_Text questionNameText;
     [SerializeField] private TMP_Text questionText;
 
+    [SerializeField] private TMP_InputField answerInputField;
+
     private Tween _timerTween;
+
     public void Start()
     {
         GameLogic.OnQuestionSelectedAction += UpdateUI;
-        
-        UpdateUI(null); 
+
+        UpdateUI(null);
+        SomeMethod();
+
     }
+
+    public void Test(string str)
+    {
+        timerText.color = Color.red;
+        timerText.text = str;
+    }
+
+// 
     
+    [DllImport("__Internal")]
+    private static extern void GameStart (string userName, int score);
+
+    public void SomeMethod()
+    {
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+    GameStart ("Player1", 100);
+#endif
+    }
+
+
+
     private void UpdateUI(QuestionSO question)
     {
         if (question == null)
@@ -40,6 +69,11 @@ public class UI : MonoBehaviour
         }).SetLoops(loops, LoopType.Restart);
     }
     
+    public void OnSubmitAnswer()
+    {
+        string answer = answerInputField.text.Trim();
+        gameLogic.OnSubmitAnswerButtonClicked(answer);
+    }
     
     
 }

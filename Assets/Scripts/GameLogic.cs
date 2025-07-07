@@ -75,6 +75,23 @@ public class GameLogic: MonoBehaviour
         }
     }
     
+    public void OnSubmitAnswerButtonClicked(string answer)
+    {
+        if (_currentSelectedQuestion != null && _currentSelectedQuestion.QuestionData.CorrectAnswer.Equals(answer, StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.Log("Correct Answer!");
+            
+        }
+        else
+        {
+            Debug.Log("Incorrect Answer!");
+            //OnQuestionExpired();
+        }
+        
+        // Optionally, you can move to the next question after submitting an answer
+        OnNextQuestion();
+    }
+    
     private void OnQuestionExpired()
     {
         if (_currentSelectedQuestion != null && _currentSelectedQuestion.QuestionData == _activeQuestions[0].QuestionData)
