@@ -32,13 +32,13 @@ public class UI : MonoBehaviour
     
     public void JsonTest(string json)
     {
-        json = JsonUtility.FromJson(json, typeof(string)) as string;
-        if (string.IsNullOrEmpty(json))
-        {
-            timerText.color = Color.red;
-            timerText.text = "Invalid JSON";
-            return;
-        }
+        // json = JsonUtility.FromJson(json, typeof(string)) as string;
+        // if (string.IsNullOrEmpty(json))
+        // {
+        //     timerText.color = Color.red;
+        //     timerText.text = "Invalid JSON";
+        //     return;
+        // }
         
         timerText.color = Color.green;
         timerText.text = json;
