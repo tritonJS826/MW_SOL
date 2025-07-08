@@ -20,8 +20,7 @@ public class UI : MonoBehaviour
         GameLogic.OnQuestionSelectedAction += UpdateUI;
 
         UpdateUI(null);
-        SomeMethod();
-
+        Test();
     }
 
     public void Test(string str)
@@ -32,13 +31,7 @@ public class UI : MonoBehaviour
     
     public void JsonTest(string json)
     {
-        // json = JsonUtility.FromJson(json, typeof(string)) as string;
-        // if (string.IsNullOrEmpty(json))
-        // {
-        //     timerText.color = Color.red;
-        //     timerText.text = "Invalid JSON";
-        //     return;
-        // }
+        
         
         timerText.color = Color.green;
         timerText.text = json;
@@ -47,13 +40,14 @@ public class UI : MonoBehaviour
 
     
     [DllImport("__Internal")]
-    private static extern void GameStart (string userName, int score);
+    private static extern void GameStarted ();
+    
+    [DllImport("__Internal")]
+    private static extern void GameFinished ();
 
-    public void SomeMethod()
+    public void Test()
     {
-#if UNITY_WEBGL == true && UNITY_EDITOR == false
-    GameStart ("Player1", 100);
-#endif
+        GameStarted();
     }
 
 
