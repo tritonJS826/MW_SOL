@@ -16,12 +16,24 @@ public class UI : MonoBehaviour
 
     private Tween _timerTween;
 
+    [DllImport("__Internal")]
+    private static extern void GameStarted ();
+    
+    [DllImport("__Internal")]
+    private static extern void GameFinished ();
+
+    
+    
     public void Start()
     {
         GameLogic.OnQuestionSelectedAction += UpdateUI;
 
         UpdateUI(null);
-        Test();
+        
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+    GameStarted();
+#endif
+        
     }
 
     public void Test(string str)
@@ -38,20 +50,7 @@ public class UI : MonoBehaviour
         timerText.text = json;
     }
 
-
     
-    [DllImport("__Internal")]
-    private static extern void GameStarted ();
-    
-    [DllImport("__Internal")]
-    private static extern void GameFinished ();
-
-    public void Test()
-    {
-        GameStarted();
-    }
-
-
 
     private void UpdateUI(QuestionData data)
     {

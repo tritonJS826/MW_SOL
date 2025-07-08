@@ -40,7 +40,6 @@ public class GameLogic: MonoBehaviour
             OnQuestionExpired(_currentSelectedQuestion);
         }
         
-        // Optionally, you can move to the next question after submitting an answer
         OnNextQuestion();
     }
 
