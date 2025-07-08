@@ -5,11 +5,11 @@ namespace Data
     [Serializable]
     public class QuestionList
     {
-        public QuestionData[] Questions;
+        public QuestionData[] questions;
 
         public QuestionList(QuestionData[] questions)
         {
-            Questions = questions;
+            this.questions = questions;
         }
     }
 }

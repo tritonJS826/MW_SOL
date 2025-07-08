@@ -28,7 +28,7 @@ public class GameLogic: MonoBehaviour
     
     public void OnSubmitAnswerButtonClicked(string answer)
     {
-        if (_currentSelectedQuestion != null && _currentSelectedQuestion.QuestionData.Answer.Equals(answer, StringComparison.OrdinalIgnoreCase))
+        if (_currentSelectedQuestion != null && _currentSelectedQuestion.QuestionData.answer.Equals(answer, StringComparison.OrdinalIgnoreCase))
         {
             OnQuestionExpired(_currentSelectedQuestion);
             Debug.Log("Correct Answer!");
@@ -45,7 +45,7 @@ public class GameLogic: MonoBehaviour
 
     public void SetUpQuestions(QuestionList questions)
     {
-        if (questions == null || questions.Questions == null || questions.Questions.Length == 0)
+        if (questions == null || questions.questions == null || questions.questions.Length == 0)
         {
             Debug.LogError("No questions available to set up.");
             return;
@@ -97,10 +97,10 @@ public class GameLogic: MonoBehaviour
 
     private IEnumerator SpawnQuestions() 
     {
-        while (_currentQuestionIndex < questionList.Questions.Length)
+        while (_currentQuestionIndex < questionList.questions.Length)
         {
             yield return new WaitForSeconds(_spawnInterval);
-            QuestionData question = questionList.Questions[_currentQuestionIndex];
+            QuestionData question = questionList.questions[_currentQuestionIndex];
             
             if (question != null)
             {

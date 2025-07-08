@@ -61,14 +61,14 @@ public class UI : MonoBehaviour
             return;
         }
         
-        questionNameText.text = data.Name;
-        questionText.text = data.QuestionText;
+        questionNameText.text = data.name;
+        questionText.text = data.questionText;
         
         _timerTween?.Kill();
         _timerTween = null;
         
         float interval = 0.1f; 
-        float totalDuration = data.TimeToAnswer;
+        float totalDuration = data.timeToAnswer;
         int loops = Mathf.FloorToInt(totalDuration / interval);
         _timerTween = DOVirtual.DelayedCall(interval, () =>
         {

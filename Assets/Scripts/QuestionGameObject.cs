@@ -19,7 +19,7 @@ public class QuestionGameObject : MonoBehaviour
 
     public void StartMoving(Vector2 targetPosition)
     {
-        transform.DOLocalMove(targetPosition, questionData.TimeToAnswer, false)
+        transform.DOLocalMove(targetPosition, questionData.timeToAnswer, false)
             .SetEase(Ease.Linear)
             .OnComplete(() => { onCompleteCallback?.Invoke(this); });
     }
