@@ -14,14 +14,16 @@ public class ReactEventHandler : MonoBehaviour
         //     Debug.LogError($"Answer: {question.Answer}, Name: {question.Name}, Order: {question.Order}, QuestionText: {question.QuestionText}, Uuid: {question.Uuid}, TimeToAnswer: {question.TimeToAnswer}");
         // }
         
+        /*
         string str = $"Question List Received: {questionList.questions.Length} questions";
         foreach (var question in questionList.questions)
         {
             str +=
                 $"\nAnswer: {question.answer}, Name: {question.name}, Order: {question.order}, QuestionText: {question.questionText}, Uuid: {question.uuid}, TimeToAnswer: {question.timeToAnswer}";
         }
+        */
 
-        Debug.LogWarning(str);
+        Debug.LogWarning(json);
         gameLogic.SetUpQuestions(questionList);
         
     }
