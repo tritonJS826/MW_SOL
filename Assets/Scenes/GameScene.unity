@@ -237,7 +237,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.105}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.5599365, y: 0.21069336}
+  m_AnchoredPosition: {x: -1.5600586, y: 0.21069336}
   m_SizeDelta: {x: 449.37, y: 0.40137}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &134572692
@@ -1348,7 +1348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe96b943ee8904697a1e0a1a73a01337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questions: []
+  questionPrefab: {fileID: 0}
 --- !u!4 &1236824842
 Transform:
   m_ObjectHideFlags: 0
@@ -1376,8 +1376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3700131bc80e4c3fb049cc15bed0ebde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allQuestions: {fileID: 0}
-  questionPrefab: {fileID: 0}
 --- !u!1 &1330451380
 GameObject:
   m_ObjectHideFlags: 0
@@ -1598,7 +1596,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -225.42023, y: -51.637024}
+  m_AnchoredPosition: {x: -225.4201, y: -51.636963}
   m_SizeDelta: {x: -450.84, y: -103.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1648701311
@@ -1894,8 +1892,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e166b73df99a4e67af938610eb92add, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedVisual: {fileID: 0}
-  questionData: {fileID: 0}
+  gameLogic: {fileID: 1236824841}
+  timerText: {fileID: 712248247}
+  questionNameText: {fileID: 2050033525}
+  questionText: {fileID: 1971476058}
+  answerInputField: {fileID: 916923258}
 --- !u!114 &1774822117
 MonoBehaviour:
   m_ObjectHideFlags: 0
