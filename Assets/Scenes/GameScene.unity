@@ -1348,7 +1348,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe96b943ee8904697a1e0a1a73a01337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questionPrefab: {fileID: 0}
+  questionList:
+    Questions: []
+  questionPrefab: {fileID: 1705699464307265903, guid: 5c91f1a9ccfc74d818a4ade038849eed, type: 3}
 --- !u!4 &1236824842
 Transform:
   m_ObjectHideFlags: 0
