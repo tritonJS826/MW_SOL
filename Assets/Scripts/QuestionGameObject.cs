@@ -1,24 +1,25 @@
+using Data;
 using DG.Tweening;
 using UnityEngine;
 
 public class QuestionGameObject : MonoBehaviour
 {
     [SerializeField] private GameObject selectedVisual;
-    [SerializeField] private QuestionSO questionData;
+    [SerializeField] private QuestionData questionData;
     
     private TweenCallback<QuestionGameObject> onCompleteCallback;
 
-    public QuestionSO QuestionData => questionData;
+    public QuestionData QuestionData => questionData;
 
-    public void Initialize(QuestionSO question, TweenCallback<QuestionGameObject> onComplete = null)
+    public void Initialize(QuestionData data, TweenCallback<QuestionGameObject> onComplete = null)
     {
-        questionData = question;
+        questionData = data;
         onCompleteCallback = onComplete;
     }
 
     public void StartMoving(Vector2 targetPosition)
     {
-        transform.DOLocalMove(targetPosition, questionData.SpeedTime, false)
+        transform.DOLocalMove(targetPosition, questionData.TimeToAnswer, false)
             .SetEase(Ease.Linear)
             .OnComplete(() => { onCompleteCallback?.Invoke(this); });
     }

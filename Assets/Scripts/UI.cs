@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Data;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -52,23 +53,23 @@ public class UI : MonoBehaviour
 
 
 
-    private void UpdateUI(QuestionSO question)
+    private void UpdateUI(QuestionData data)
     {
-        if (question == null)
+        if (data == null)
         {
             questionNameText.text = "";
             questionText.text = "";
             return;
         }
         
-        questionNameText.text = question.QuestionName;
-        questionText.text = question.QuestionText;
+        questionNameText.text = data.Name;
+        questionText.text = data.QuestionText;
         
         _timerTween?.Kill();
         _timerTween = null;
         
         float interval = 0.1f; 
-        float totalDuration = question.SpeedTime;
+        float totalDuration = data.TimeToAnswer;
         int loops = Mathf.FloorToInt(totalDuration / interval);
         _timerTween = DOVirtual.DelayedCall(interval, () =>
         {

@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Data;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class GameLogic: MonoBehaviour
 {
-    [SerializeField] private AllQuestionsSO allQuestions;
+    [SerializeField] private QuestionList questionList;
     [SerializeField] private QuestionGameObject questionPrefab;
     
-    public static Action<QuestionSO> OnQuestionSelectedAction;
+    public static Action<QuestionData> OnQuestionSelectedAction;
     
     private int _currentQuestionIndex = 0;
     private float _timer = 0f;
@@ -20,9 +21,52 @@ public class GameLogic: MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(SpawnQuestions());
+        //StartCoroutine(SpawnQuestions());
         PlayerInput.OnNextQuestionAction += OnNextQuestion;
         PlayerInput.OnQuestionClickedAction += UpdateCurrentSelectedQuestion;
+    }
+    
+    public void OnSubmitAnswerButtonClicked(string answer)
+    {
+        if (_currentSelectedQuestion != null && _currentSelectedQuestion.QuestionData.Answer.Equals(answer, StringComparison.OrdinalIgnoreCase))
+        {
+            OnQuestionExpired(_currentSelectedQuestion);
+            Debug.Log("Correct Answer!");
+            
+        }
+        else
+        {
+            Debug.Log("Incorrect Answer!");
+            OnQuestionExpired(_currentSelectedQuestion);
+        }
+        
+        // Optionally, you can move to the next question after submitting an answer
+        OnNextQuestion();
+    }
+
+    public void SetUpQuestions(QuestionList questions)
+    {
+        if (questions == null || questions.Questions == null || questions.Questions.Length == 0)
+        {
+            Debug.LogError("No questions available to set up.");
+            return;
+        }
+        
+        questionList = questions;
+        _currentQuestionIndex = 0;
+        
+        foreach (var questionGO in _activeQuestions)
+        {
+            if (questionGO != null)
+            {
+                questionGO.StopAllTwens();
+                Destroy(questionGO.gameObject);
+            }
+        }
+        _activeQuestions.Clear();
+        
+        StopAllCoroutines();
+        StartCoroutine(SpawnQuestions());
     }
     
     private void OnNextQuestion()
@@ -54,10 +98,10 @@ public class GameLogic: MonoBehaviour
 
     private IEnumerator SpawnQuestions() 
     {
-        while (_currentQuestionIndex < allQuestions.GetQuestionCount())
+        while (_currentQuestionIndex < questionList.Questions.Length)
         {
             yield return new WaitForSeconds(_spawnInterval);
-            QuestionSO question = allQuestions.GetQuestion(_currentQuestionIndex);
+            QuestionData question = questionList.Questions[_currentQuestionIndex];
             
             if (question != null)
             {
@@ -73,24 +117,6 @@ public class GameLogic: MonoBehaviour
                 Debug.LogError("Question not found at index: " + _currentQuestionIndex);
             }
         }
-    }
-    
-    public void OnSubmitAnswerButtonClicked(string answer)
-    {
-        if (_currentSelectedQuestion != null && _currentSelectedQuestion.QuestionData.CorrectAnswer.Equals(answer, StringComparison.OrdinalIgnoreCase))
-        {
-            OnQuestionExpired(_currentSelectedQuestion);
-            Debug.Log("Correct Answer!");
-            
-        }
-        else
-        {
-            Debug.Log("Incorrect Answer!");
-            OnQuestionExpired(_currentSelectedQuestion);
-        }
-        
-        // Optionally, you can move to the next question after submitting an answer
-        OnNextQuestion();
     }
     
     private void OnQuestionExpired(QuestionGameObject questionGO)

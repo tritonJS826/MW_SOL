@@ -8,14 +8,24 @@ public class ReactEventHandler : MonoBehaviour
     public void HandleQuestionListReceived(string json)
     {
         var questionList = JsonUtility.FromJson<QuestionList>(json);
-        Debug.LogError($"Question List Received: {questionList.Questions.Length} questions");
+        // Debug.LogError($"Question List Received: {questionList.Questions.Length} questions");
+        // foreach (var question in questionList.Questions)
+        // {
+        //     Debug.LogError($"Answer: {question.Answer}, Name: {question.Name}, Order: {question.Order}, QuestionText: {question.QuestionText}, Uuid: {question.Uuid}, TimeToAnswer: {question.TimeToAnswer}");
+        // }
+        
+        string str = $"Question List Received: {questionList.Questions.Length} questions";
         foreach (var question in questionList.Questions)
         {
-            Debug.LogError($"Answer: {question.Answer}, Name: {question.Name}, Order: {question.Order}, QuestionText: {question.QuestionText}, Uuid: {question.Uuid}, TimeToAnswer: {question.TimeToAnswer}");
+            str += $"\nAnswer: {question.Answer}, Name: {question.Name}, Order: {question.Order}, QuestionText: {question.QuestionText}, Uuid: {question.Uuid}, TimeToAnswer: {question.TimeToAnswer}";
         }
+
+        Debug.LogWarning(str);
+        gameLogic.SetUpQuestions(questionList);
+        
     }
 
-    public void UserAnswerHandledByServer(string json)
+    public void HandleUserAnswerHandledByServer(string json)
     {
         var userAnswer = JsonUtility.FromJson<UserAnswerHandledByServer>(json);
         Debug.LogError($"User Answer Handled: IsOk: {userAnswer.IsOk}, UserUuid: {userAnswer.UserUuid}, UserAnswer: {userAnswer.UserAnswer}, QuestionName: {userAnswer.QuestionName}, QuestionDescription: {userAnswer.QuestionDescription}, QuestionAnswer: {userAnswer.QuestionAnswer}, ResultDescription: {userAnswer.ResultDescription}, QuestionUuid: {userAnswer.QuestionUuid}, Uuid: {userAnswer.Uuid}");
