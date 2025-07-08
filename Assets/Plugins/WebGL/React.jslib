@@ -1,5 +1,14 @@
 mergeInto(LibraryManager.library, {
-    _GameStart: function(userName, score) {
-        window.dispatchReactUnityEvent("GameStart", UTF8ToString(userName), score);
+    GameStarted: function() {
+        window.dispatchReactUnityEvent("GameStarted");
+    },
+    GameFinished: function() {
+        window.dispatchReactUnityEvent("GameFinished");
+    },
+    UserAnsweredQuestion: function(questionUuid, userAnswer) {
+        window.dispatchReactUnityEvent("GameStart", UTF8ToString(questionUuid), UTF8ToString(userAnswer));
+    },
+    UserCapturedTarget: function(questionUuid) {
+        window.dispatchReactUnityEvent("GameStart", UTF8ToString(questionUuid));
     },
 });
