@@ -1,9 +1,11 @@
+using System;
+
 namespace Data
 {
-    [System.Serializable]
+    [Serializable]
     public class QuestionList
     {
-        public QuestionData[] Questions { get; set; }
+        public QuestionData[] Questions;
 
         public QuestionList(QuestionData[] questions)
         {

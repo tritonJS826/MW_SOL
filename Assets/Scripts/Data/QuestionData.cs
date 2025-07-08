@@ -1,14 +1,16 @@
+using System;
+
 namespace Data
 {
-    [System.Serializable]
+    [Serializable]
     public class QuestionData
     {
-        public string Answer { get; set; }
-        public string Name { get; set; }
-        public int Order { get; set; }
-        public string QuestionText { get; set; }
-        public string Uuid { get; set; }
-        public float TimeToAnswer { get; set; }
+        public string Answer;
+        public string Name;
+        public int Order;
+        public string QuestionText;
+        public string Uuid;
+        public float TimeToAnswer;
         
         public QuestionData(string answer, string name, int order, string questionText, string uuid, float timeToAnswer)
         {
@@ -19,5 +21,7 @@ namespace Data
             Uuid = uuid;
             TimeToAnswer = timeToAnswer;
         }
+        
+        
     }
 }
