@@ -3,10 +3,16 @@ using UnityEngine;
 
 public class ReactEventHandler : MonoBehaviour
 {
+    [SerializeField] private GameLogic gameLogic;
+
     public void HandleQuestionListReceived(string json)
     {
-        var questionList = JsonUtility.FromJson<QuestionListReceived>(json);
-        Debug.LogError($"Question List Received: {questionList.Name}, Number: {questionList.Number}, Question: {questionList.QuestionText}, UUID: {questionList.Uuid}, Time to Answer: {questionList.TimeToAnswer}");
+        var questionList = JsonUtility.FromJson<QuestionList>(json);
+        Debug.LogError($"Question List Received: {questionList.Questions.Length} questions");
+        foreach (var question in questionList.Questions)
+        {
+            Debug.LogError($"Answer: {question.Answer}, Name: {question.Name}, Order: {question.Order}, QuestionText: {question.QuestionText}, Uuid: {question.Uuid}, TimeToAnswer: {question.TimeToAnswer}");
+        }
     }
 
     public void UserAnswerHandledByServer(string json)
