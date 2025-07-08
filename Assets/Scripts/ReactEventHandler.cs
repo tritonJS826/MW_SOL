@@ -7,21 +7,22 @@ public class ReactEventHandler : MonoBehaviour
 
     public void HandleQuestionListReceived(string json)
     {
-        var questionList = JsonUtility.FromJson<QuestionList>(json);
+        Debug.LogError($"Question List Received: {json}");
+        //var questionList = JsonUtility.FromJson<QuestionList>(json);
         // Debug.LogError($"Question List Received: {questionList.Questions.Length} questions");
         // foreach (var question in questionList.Questions)
         // {
         //     Debug.LogError($"Answer: {question.Answer}, Name: {question.Name}, Order: {question.Order}, QuestionText: {question.QuestionText}, Uuid: {question.Uuid}, TimeToAnswer: {question.TimeToAnswer}");
         // }
         
-        string str = $"Question List Received: {questionList.Questions.Length} questions";
-        foreach (var question in questionList.Questions)
-        {
-            str += $"\nAnswer: {question.Answer}, Name: {question.Name}, Order: {question.Order}, QuestionText: {question.QuestionText}, Uuid: {question.Uuid}, TimeToAnswer: {question.TimeToAnswer}";
-        }
-
-        Debug.LogWarning(str);
-        gameLogic.SetUpQuestions(questionList);
+        // string str = $"Question List Received: {questionList.Questions.Length} questions";
+        // foreach (var question in questionList.Questions)
+        // {
+        //     str += $"\nAnswer: {question.Answer}, Name: {question.Name}, Order: {question.Order}, QuestionText: {question.QuestionText}, Uuid: {question.Uuid}, TimeToAnswer: {question.TimeToAnswer}";
+        // }
+        //
+        // Debug.LogWarning(str);
+        // gameLogic.SetUpQuestions(questionList);
         
     }
 
