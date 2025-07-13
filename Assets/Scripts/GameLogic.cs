@@ -130,9 +130,6 @@ public class GameLogic: MonoBehaviour
     private void OnQuestionAnswered(QuestionGameObject questionGO, bool isCorrect)
     {
         RemoveQuestionObjectFromTheList(questionGO);
-        questionGO.StopAllTwens();
-        Destroy(questionGO.gameObject);
-        
         questionGO.StopAndDestroy(isCorrect);
     }
     
