@@ -6,7 +6,7 @@ public class ReactEventHandler: MonoBehaviour
 {
     [SerializeField] private GameLogic gameLogic;
 
-    private void Awake()
+    private void Start()
     {
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
     GameStarted();

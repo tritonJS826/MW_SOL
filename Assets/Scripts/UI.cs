@@ -20,12 +20,18 @@ public class UI: MonoBehaviour
     // FIXME: only for testing purposes, remove later
     public static UI Instance { get; private set; }
     
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+    
     public void Start()
     {
         GameLogic.OnQuestionSelectedAction += UpdateUI;
         UpdateUI(null);
-        
-        Instance = this;
     }
 
     public void ShowDebugText(string text)
