@@ -129,6 +129,7 @@ public class GameLogic: MonoBehaviour
     
     private void OnQuestionAnswered(QuestionGameObject questionGO, bool isCorrect)
     {
+        Debug.Log($"Question answered: {questionGO.QuestionData.name}, Correct: {isCorrect}");
         RemoveQuestionObjectFromTheList(questionGO);
         questionGO.StopAndDestroy(isCorrect);
     }
