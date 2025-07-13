@@ -13,15 +13,25 @@ public class UI: MonoBehaviour
     [SerializeField] private TMP_Text questionText;
 
     [SerializeField] private TMP_InputField answerInputField;
+    [SerializeField] private TMP_Text debugText;
 
     private Tween _timerTween;
+    
+    // FIXME: only for testing purposes, remove later
+    public static UI Instance { get; private set; }
     
     public void Start()
     {
         GameLogic.OnQuestionSelectedAction += UpdateUI;
         UpdateUI(null);
+        
+        Instance = this;
     }
 
+    public void ShowDebugText(string text)
+    {
+        debugText.text = debugText + "\n" + text;
+    }
     
     private void UpdateUI(QuestionData data)
     {

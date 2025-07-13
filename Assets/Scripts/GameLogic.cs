@@ -42,10 +42,12 @@ public class GameLogic: MonoBehaviour
 
     public void ServerSentQuestionAnswer(UserAnswerHandledByServer userAnswer)
     {
+        UI.Instance.ShowDebugText($"Server sent answer for question {userAnswer.questionUuid}: {userAnswer.isOk}");
         foreach (var questionGO in _activeQuestions)
         {
             if (questionGO.QuestionData.uuid == userAnswer.questionUuid)
             {
+                UI.Instance.ShowDebugText($"I found my gm: {questionGO.QuestionData.name} with answer: {userAnswer.isOk}");
                 OnQuestionAnswered(questionGO, userAnswer.isOk);
                 return;
             }
@@ -56,7 +58,7 @@ public class GameLogic: MonoBehaviour
     {
         if (questions == null || questions.questions == null || questions.questions.Length == 0)
         {
-            Debug.LogError("No questions available to set up.");
+           UI.Instance.ShowDebugText("No questions available to set up.");
             return;
         }
         

@@ -10,6 +10,7 @@ public class ReactEventHandler: MonoBehaviour
     {
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
     GameStarted();
+        UI.Instance.ShowDebugText("Started game in ReactEventHandler");
 #endif
         
         GameLogic.OnQuestionSelectedAction += HandleQuestionSelected;
