@@ -8,6 +8,7 @@ public class ReactEventHandler: MonoBehaviour
 
     private void Start()
     {
+        UI.Instance.ShowDebugText("Started ");
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
     GameStarted();
         UI.Instance.ShowDebugText("Started game in ReactEventHandler");

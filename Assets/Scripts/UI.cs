@@ -36,7 +36,7 @@ public class UI: MonoBehaviour
 
     public void ShowDebugText(string text)
     {
-        debugText.text = debugText + "\n" + text;
+        debugText.text = debugText.text + "\n" + text;
     }
     
     private void UpdateUI(QuestionData data)
