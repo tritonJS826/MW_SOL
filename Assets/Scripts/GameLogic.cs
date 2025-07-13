@@ -132,7 +132,7 @@ public class GameLogic: MonoBehaviour
         questionGO.StopAllTwens();
         Destroy(questionGO.gameObject);
         
-        OnQuestionExpired(questionGO);
+        questionGO.StopAndDestroy(isCorrect);
     }
     
     private void OnQuestionExpired(QuestionGameObject questionGO)
@@ -145,6 +145,11 @@ public class GameLogic: MonoBehaviour
         RemoveQuestionObjectFromTheList(questionGO);
         questionGO.StopAllTwens();
         Destroy(questionGO.gameObject);
+        
+        if(_activeQuestions.Count == 0)
+        {
+            ReactEventHandler.GameFinished();
+        }
     }
 
     private void RemoveQuestionObjectFromTheList(QuestionGameObject questionGO)

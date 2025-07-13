@@ -26,7 +26,7 @@ public class ReactEventHandler: MonoBehaviour
     private static extern void GameStarted();
 
     [DllImport("__Internal")]
-    private static extern void GameFinished();
+    public static extern void GameFinished();
     
     [DllImport("__Internal")]
     public static extern void UserAnsweredQuestion(string questionUuid, string userAnswer);

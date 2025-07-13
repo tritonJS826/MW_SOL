@@ -103,7 +103,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedVisual: {fileID: 3599957889712096301}
-  questionData: {fileID: 0}
+  questionData:
+    answer: 
+    name: 
+    order: 0
+    questionText: 
+    uuid: 
+    timeToAnswer: 0
+  spriteRenderer: {fileID: 844928239345949157}
 --- !u!61 &-3767223695025714985
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -2,14 +2,18 @@ using Data;
 using DG.Tweening;
 using UnityEngine;
 
-public class QuestionGameObject : MonoBehaviour
+public class QuestionGameObject: MonoBehaviour
 {
     [SerializeField] private GameObject selectedVisual;
     [SerializeField] private QuestionData questionData;
+    [SerializeField] private SpriteRenderer spriteRenderer;
     
     private TweenCallback<QuestionGameObject> onCompleteCallback;
 
+
     public QuestionData QuestionData => questionData;
+    
+    
 
     public void Initialize(QuestionData data, TweenCallback<QuestionGameObject> onComplete = null)
     {
@@ -38,6 +42,25 @@ public class QuestionGameObject : MonoBehaviour
     {
         DOTween.Kill(transform);
         onCompleteCallback = null;
+    }
+
+    public void StopAndDestroy(bool isCorrect)
+    {
+        StopAllTwens();
+        
+        if (isCorrect)
+        {
+            // Handle correct answer visual feedback
+            spriteRenderer.color = Color.green; // Example: change color to green
+        }
+        else
+        {
+            // Handle incorrect answer visual feedback
+            spriteRenderer.color = Color.red; // Example: change color to red
+        }
+        
+        Destroy(gameObject, 1f); // Adjust the delay as needed
+        
     }
     
 
