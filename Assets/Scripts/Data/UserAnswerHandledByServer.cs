@@ -1,18 +1,19 @@
+using System;
+
 namespace Data
 {
-    [System.Serializable]
+    [Serializable]
     public class UserAnswerHandledByServer
     {
-        public bool isOk { get; set; }
-        public string userUuid { get; set; }
-        public string userAnswer { get; set; }
-        public string questionName { get; set; }
-        public string questionDescription { get; set; }
-        public string questionAnswer { get; set; }
-        public string resultDescription { get; set; }
-        public string questionUuid { get; set; }
-        public string uuid { get; set; }
-
+        public bool isOk;
+        public string userUuid;
+        public string userAnswer;
+        public string questionName;
+        public string questionDescription;
+        public string questionAnswer;
+        public string resultDescription;
+        public string questionUuid;
+        public string uuid;
 
         public UserAnswerHandledByServer(bool isOk, string userUuid, string userAnswer, string questionName,
             string questionDescription, string questionAnswer, string resultDescription, string questionUuid,
