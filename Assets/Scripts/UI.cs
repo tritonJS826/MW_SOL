@@ -4,7 +4,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-public class UI : MonoBehaviour
+public class UI: MonoBehaviour
 {
     [SerializeField] private GameLogic gameLogic;
 
@@ -15,43 +15,14 @@ public class UI : MonoBehaviour
     [SerializeField] private TMP_InputField answerInputField;
 
     private Tween _timerTween;
-
-    [DllImport("__Internal")]
-    private static extern void GameStarted ();
-    
-    [DllImport("__Internal")]
-    private static extern void GameFinished ();
-
-    
     
     public void Start()
     {
         GameLogic.OnQuestionSelectedAction += UpdateUI;
-
         UpdateUI(null);
-        
-#if UNITY_WEBGL == true && UNITY_EDITOR == false
-    GameStarted();
-#endif
-        
-    }
-
-    public void Test(string str)
-    {
-        timerText.color = Color.red;
-        timerText.text = str;
-    }
-    
-    public void JsonTest(string json)
-    {
-        
-        
-        timerText.color = Color.green;
-        timerText.text = json;
     }
 
     
-
     private void UpdateUI(QuestionData data)
     {
         if (data == null)
@@ -81,6 +52,4 @@ public class UI : MonoBehaviour
         string answer = answerInputField.text.Trim();
         gameLogic.OnSubmitAnswerButtonClicked(answer);
     }
-    
-    
 }

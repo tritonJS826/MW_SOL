@@ -1,36 +1,60 @@
+using System.Runtime.InteropServices;
 using Data;
 using UnityEngine;
 
-public class ReactEventHandler : MonoBehaviour
+public class ReactEventHandler: MonoBehaviour
 {
     [SerializeField] private GameLogic gameLogic;
+
+    private void Awake()
+    {
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+    GameStarted();
+#endif
+        
+        GameLogic.OnQuestionSelectedAction += HandleQuestionSelected;
+    }
 
     public void HandleQuestionListReceived(string json)
     {
         var questionList = JsonUtility.FromJson<QuestionList>(json);
-        // Debug.LogError($"Question List Received: {questionList.Questions.Length} questions");
-        // foreach (var question in questionList.Questions)
-        // {
-        //     Debug.LogError($"Answer: {question.Answer}, Name: {question.Name}, Order: {question.Order}, QuestionText: {question.QuestionText}, Uuid: {question.Uuid}, TimeToAnswer: {question.TimeToAnswer}");
-        // }
-        
-        /*
-        string str = $"Question List Received: {questionList.questions.Length} questions";
-        foreach (var question in questionList.questions)
-        {
-            str +=
-                $"\nAnswer: {question.answer}, Name: {question.name}, Order: {question.order}, QuestionText: {question.questionText}, Uuid: {question.uuid}, TimeToAnswer: {question.timeToAnswer}";
-        }
-        */
-
-        Debug.LogWarning(json);
         gameLogic.SetUpQuestions(questionList);
-        
     }
 
+    // Unity -> server communication
+    [DllImport("__Internal")]
+    private static extern void GameStarted();
+
+    [DllImport("__Internal")]
+    private static extern void GameFinished();
+    
+    [DllImport("__Internal")]
+    public static extern void UserAnsweredQuestion(string questionUuid, string userAnswer);
+
+    [DllImport("__Internal")]
+    public static extern void UserCapturedTarget(string questionUuid);
+
+    
+    // Server -> Unity communication
     public void HandleUserAnswerHandledByServer(string json)
     {
         var userAnswer = JsonUtility.FromJson<UserAnswerHandledByServer>(json);
-        Debug.LogError($"User Answer Handled: IsOk: {userAnswer.IsOk}, UserUuid: {userAnswer.UserUuid}, UserAnswer: {userAnswer.UserAnswer}, QuestionName: {userAnswer.QuestionName}, QuestionDescription: {userAnswer.QuestionDescription}, QuestionAnswer: {userAnswer.QuestionAnswer}, ResultDescription: {userAnswer.ResultDescription}, QuestionUuid: {userAnswer.QuestionUuid}, Uuid: {userAnswer.Uuid}");
+        gameLogic.ServerSentQuestionAnswer(userAnswer);
     }
+    
+    
+    // 
+    
+    private void HandleQuestionSelected(QuestionData questionData)
+    {
+        if (questionData == null) return;
+        
+        UserCapturedTarget(questionData.uuid);
+    }
+    
+    private void OnDestroy()
+    {
+        GameLogic.OnQuestionSelectedAction -= HandleQuestionSelected;
+    }
+  
 }

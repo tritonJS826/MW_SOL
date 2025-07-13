@@ -6,9 +6,9 @@ mergeInto(LibraryManager.library, {
         window.dispatchReactUnityEvent("GameFinished");
     },
     UserAnsweredQuestion: function(questionUuid, userAnswer) {
-        window.dispatchReactUnityEvent("GameStart", UTF8ToString(questionUuid), UTF8ToString(userAnswer));
+        window.dispatchReactUnityEvent("UserAnsweredQuestion", UTF8ToString(questionUuid), UTF8ToString(userAnswer));
     },
     UserCapturedTarget: function(questionUuid) {
-        window.dispatchReactUnityEvent("GameStart", UTF8ToString(questionUuid));
+        window.dispatchReactUnityEvent("UserCapturedTarget", UTF8ToString(questionUuid));
     },
 });

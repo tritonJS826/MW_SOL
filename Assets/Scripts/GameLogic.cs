@@ -28,19 +28,27 @@ public class GameLogic: MonoBehaviour
     
     public void OnSubmitAnswerButtonClicked(string answer)
     {
-        if (_currentSelectedQuestion != null && _currentSelectedQuestion.QuestionData.answer.Equals(answer, StringComparison.OrdinalIgnoreCase))
+        if (_currentSelectedQuestion == null)
         {
-            OnQuestionExpired(_currentSelectedQuestion);
-            Debug.Log("Correct Answer!");
-            
-        }
-        else
-        {
-            Debug.Log("Incorrect Answer!");
-            OnQuestionExpired(_currentSelectedQuestion);
+            return; // No question selected
         }
         
+        ReactEventHandler.UserAnsweredQuestion(_currentSelectedQuestion.QuestionData.uuid, answer);
+        
+        
         OnNextQuestion();
+    }
+
+    public void ServerSentQuestionAnswer(UserAnswerHandledByServer userAnswer)
+    {
+        foreach (var questionGO in _activeQuestions)
+        {
+            if (questionGO.QuestionData.uuid == userAnswer.questionUuid)
+            {
+                OnQuestionAnswered(questionGO, userAnswer.isOk);
+                return;
+            }
+        }
     }
 
     public void SetUpQuestions(QuestionList questions)
@@ -118,7 +126,28 @@ public class GameLogic: MonoBehaviour
         }
     }
     
+    private void OnQuestionAnswered(QuestionGameObject questionGO, bool isCorrect)
+    {
+        RemoveQuestionObjectFromTheList(questionGO);
+        questionGO.StopAllTwens();
+        Destroy(questionGO.gameObject);
+        
+        OnQuestionExpired(questionGO);
+    }
+    
     private void OnQuestionExpired(QuestionGameObject questionGO)
+    {
+        if (questionGO == null)
+        {
+            return;
+        }
+        
+        RemoveQuestionObjectFromTheList(questionGO);
+        questionGO.StopAllTwens();
+        Destroy(questionGO.gameObject);
+    }
+
+    private void RemoveQuestionObjectFromTheList(QuestionGameObject questionGO)
     {
         if (questionGO == null)
         {
@@ -140,7 +169,5 @@ public class GameLogic: MonoBehaviour
         {
             OnQuestionSelectedAction?.Invoke(null);
         }
-        questionGO.StopAllTwens();
-        Destroy(questionGO.gameObject);
     }
 }
