@@ -42,6 +42,7 @@ public class GameLogic: MonoBehaviour
 
     public void ServerSentQuestionAnswer(UserAnswerHandledByServer userAnswer)
     {
+        UI.Instance.ShowDebugText($"isOk: {userAnswer.isOk}, questionUuid: {userAnswer.questionUuid}, answer: {userAnswer.userAnswer} playerUuid: {userAnswer.userUuid}");
         UI.Instance.ShowDebugText($"Server sent answer for question {userAnswer.questionUuid}: {userAnswer.isOk}");
         foreach (var questionGO in _activeQuestions)
         {
