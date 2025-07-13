@@ -35,6 +35,7 @@ public class GameLogic: MonoBehaviour
         
         ReactEventHandler.UserAnsweredQuestion(_currentSelectedQuestion.QuestionData.uuid, answer);
         
+        _currentSelectedQuestion.SetWaitingForAnswer(true);
         
         OnNextQuestion();
     }

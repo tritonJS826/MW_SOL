@@ -8,6 +8,8 @@ public class QuestionGameObject: MonoBehaviour
     [SerializeField] private QuestionData questionData;
     [SerializeField] private SpriteRenderer spriteRenderer;
     
+    private bool isWaitingForAnswer = false;
+    
     private TweenCallback<QuestionGameObject> onCompleteCallback;
 
 
@@ -44,6 +46,12 @@ public class QuestionGameObject: MonoBehaviour
         onCompleteCallback = null;
     }
 
+    public void SetWaitingForAnswer(bool isWaiting)
+    {
+        isWaitingForAnswer = isWaiting;
+        spriteRenderer.color = isWaiting ? Color.yellow : Color.white;
+    }
+    
     public void StopAndDestroy(bool isCorrect)
     {
         StopAllTwens();
@@ -61,6 +69,11 @@ public class QuestionGameObject: MonoBehaviour
         
         Destroy(gameObject, 1f); // Adjust the delay as needed
         
+    }
+    
+    public bool IsWaitingForAnswer()
+    {
+        return isWaitingForAnswer;
     }
     
 
