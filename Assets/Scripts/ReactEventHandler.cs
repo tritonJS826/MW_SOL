@@ -40,6 +40,7 @@ public class ReactEventHandler: MonoBehaviour
     // Server -> Unity communication
     public void HandleUserAnswerHandledByServer(string json)
     {
+        UI.Instance.ShowDebugText($"Received user answer from server: {json}");
         var userAnswer = JsonUtility.FromJson<UserAnswerHandledByServer>(json);
         gameLogic.ServerSentQuestionAnswer(userAnswer);
     }
