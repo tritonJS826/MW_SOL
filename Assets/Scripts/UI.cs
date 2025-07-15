@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using Data;
 using DG.Tweening;
 using TMPro;
@@ -26,6 +25,8 @@ public class UI: MonoBehaviour
         {
             Instance = this;
         }
+
+        answerInputField.onSubmit.AddListener((string answer) => OnSubmitAnswer());
     }
     
     public void Start()
@@ -61,11 +62,16 @@ public class UI: MonoBehaviour
         {
             timerText.text = $"{totalDuration:F1} seconds remaining";
         }).SetLoops(loops, LoopType.Restart);
+        
+        answerInputField.ActivateInputField();
     }
     
     public void OnSubmitAnswer()
     {
         string answer = answerInputField.text.Trim();
         gameLogic.OnSubmitAnswerButtonClicked(answer);
+        answerInputField.text = "";
+        
+        Debug.Log("Submitted answer: " + answer);
     }
 }

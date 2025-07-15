@@ -16,12 +16,7 @@ public class ReactEventHandler: MonoBehaviour
         
         GameLogic.OnQuestionSelectedAction += HandleQuestionSelected;
     }
-
-    public void HandleQuestionListReceived(string json)
-    {
-        var questionList = JsonUtility.FromJson<QuestionList>(json);
-        gameLogic.SetUpQuestions(questionList);
-    }
+    
 
     // Unity -> server communication
     [DllImport("__Internal")]
@@ -43,6 +38,19 @@ public class ReactEventHandler: MonoBehaviour
         UI.Instance.ShowDebugText($"Received user answer from server: {json}");
         var userAnswer = JsonUtility.FromJson<UserAnswerHandledByServer>(json);
         gameLogic.ServerSentQuestionAnswer(userAnswer);
+    }
+    
+    public void HandleQuestionListReceived(string json)
+    {
+        var questionList = JsonUtility.FromJson<QuestionList>(json);
+        foreach (var question in questionList.questions)
+        {
+            if (question.timeToAnswer <= 0)
+            {
+                question.timeToAnswer = 60f;
+            }
+        }
+        gameLogic.SetUpQuestions(questionList);
     }
     
     

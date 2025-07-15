@@ -21,7 +21,6 @@ public class GameLogic: MonoBehaviour
 
     private void Start()
     {
-        //StartCoroutine(SpawnQuestions());
         PlayerInput.OnNextQuestionAction += OnNextQuestion;
         PlayerInput.OnQuestionClickedAction += UpdateCurrentSelectedQuestion;
     }
