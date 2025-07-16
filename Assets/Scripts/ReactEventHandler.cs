@@ -30,9 +30,53 @@ public class ReactEventHandler: MonoBehaviour
 
     [DllImport("__Internal")]
     public static extern void UserCapturedTarget(string questionUuid);
-
+    
+    
+    // [ ] UserJoinedSession
+    // [ ] UserReadyToStartPlay
+    // [ ] HostStartedGame
+    // [ ] UserCapturedTarget
+    // [ ] UserAnsweredQuestion
+    // [ ] UserAnswerHandledByServer
     
     // Server -> Unity communication
+    
+    public void HandleUserJoinedSession(string json)
+    {
+        UI.Instance.ShowDebugText($"Received user joined session: {json}");
+        // var user = JsonUtility.FromJson<UserJoinedSession>(json);
+        // gameLogic.UserJoinedSession(user);
+    }
+    
+    public void HandleUserReadyToStartPlay(string json)
+    {
+        UI.Instance.ShowDebugText($"Received user ready to start play: {json}");
+        // var user = JsonUtility.FromJson<UserReadyToStartPlay>(json);
+        // gameLogic.UserReadyToStartPlay(user);
+    }
+    
+    public void HandleHostStartedGame(string json)
+    {
+        UI.Instance.ShowDebugText($"Received host started game: {json}");
+        // var host = JsonUtility.FromJson<HostStartedGame>(json);
+        // gameLogic.HostStartedGame(host);
+    }
+    
+    public void HandleUserCapturedTarget(string json)
+    {
+        UI.Instance.ShowDebugText($"Received user captured target: {json}");
+        // var userCapturedTarget = JsonUtility.FromJson<UserCapturedTarget>(json);
+        // gameLogic.UserCapturedTarget(userCapturedTarget);
+    }
+    
+    public void HandleUserAnsweredQuestion(string json)
+    {
+        UI.Instance.ShowDebugText($"User answered question: {json} ");
+        // UserCapturedTarget(questionUuid);
+        // UserAnsweredQuestion(questionUuid, userAnswer);
+    }
+    
+    
     public void HandleUserAnswerHandledByServer(string json)
     {
         UI.Instance.ShowDebugText($"Received user answer from server: {json}");
@@ -54,7 +98,6 @@ public class ReactEventHandler: MonoBehaviour
     }
     
     
-    // 
     
     private void HandleQuestionSelected(QuestionData questionData)
     {
