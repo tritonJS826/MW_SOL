@@ -45,7 +45,7 @@ public class ReactEventHandler: MonoBehaviour
     {
         UI.Instance.ShowDebugText($"Received user joined session: {json}");
         var user = JsonUtility.FromJson<UserJoinedSession>(json);
-        gameLogic.CreatePlayer(user.userUuid);
+        gameLogic.CreatePlayer(user.userUuid, user.userUuid);
     }
     
     public void HandleUserReadyToStartPlay(string json) // lobby

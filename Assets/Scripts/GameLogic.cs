@@ -20,39 +20,45 @@ public class GameLogic: MonoBehaviour
     private List<QuestionGameObject> _activeQuestions = new();
     private QuestionGameObject _currentSelectedQuestionByPlayer = null;
 
-    private List<PlayerInfo> _players = new();
+    private Dictionary<string, PlayerInfo> _players = new();
     
     private void Start()
     {
         PlayerInput.OnNextQuestionAction += OnNextQuestion;
         PlayerInput.OnQuestionClickedAction += UpdateCurrentSelectedQuestion;
-        CreatePlayer("You");
+        CreatePlayer("You", Guid.NewGuid().ToString());
     }
 
 
-    public void CreatePlayer(string name)
+    public void CreatePlayer(string name, string uuid)
     {
+        if (_players.ContainsKey(uuid))
+        {
+            UI.Instance.ShowDebugText($"Player with uuid {uuid} already exists.");
+            return;
+        }
         GameObject playerGO = Instantiate(playerPrefab, transform);
         PlayerInfo playerInfo = playerGO.GetComponent<PlayerInfo>();
         playerInfo.Initialize(name, Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.5f, 1f));
-        _players.Add(playerInfo);
+        _players.Add(uuid, playerInfo);
         UI.Instance.ShowDebugText($"Player created: {name}");
 
         int offset = 0;
-        for (int i = 0; i < _players.Count; i++)
+        int i = 0;
+        foreach (var pInfo in _players.Values)
         {
             Vector3 position = Vector3.zero;
             position.y = -4.5f;
-            
+
             int multiplier = i % 2 == 0 ? 1 : -1;
             position.x = offset * 2 * multiplier - 2;
-            if(i % 2 == 0)
+            if (i % 2 == 0)
             {
                 offset++;
             }
-            playerGO.transform.localPosition = position;
+            pInfo.transform.localPosition = position;
+            i++;
         }
-        
     }
     
     public void OnSubmitAnswerButtonClicked(string answer)
