@@ -9,6 +9,7 @@ public class GameLogic: MonoBehaviour
 {
     [SerializeField] private QuestionList questionList;
     [SerializeField] private QuestionGameObject questionPrefab;
+    [SerializeField] private GameObject playerPrefab;
     
     public static Action<QuestionData> OnQuestionSelectedAction;
     
@@ -17,24 +18,53 @@ public class GameLogic: MonoBehaviour
     private float _spawnInterval = 3f;
 
     private List<QuestionGameObject> _activeQuestions = new();
-    private QuestionGameObject _currentSelectedQuestion = null;
+    private QuestionGameObject _currentSelectedQuestionByPlayer = null;
 
+    private List<PlayerInfo> _players = new();
+    
     private void Start()
     {
         PlayerInput.OnNextQuestionAction += OnNextQuestion;
         PlayerInput.OnQuestionClickedAction += UpdateCurrentSelectedQuestion;
+        CreatePlayer("You");
+    }
+
+
+    public void CreatePlayer(string name)
+    {
+        GameObject playerGO = Instantiate(playerPrefab, transform);
+        PlayerInfo playerInfo = playerGO.GetComponent<PlayerInfo>();
+        playerInfo.Initialize(name, Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.5f, 1f));
+        _players.Add(playerInfo);
+        UI.Instance.ShowDebugText($"Player created: {name}");
+
+        int offset = 0;
+        for (int i = 0; i < _players.Count; i++)
+        {
+            Vector3 position = Vector3.zero;
+            position.y = -4.5f;
+            
+            int multiplier = i % 2 == 0 ? 1 : -1;
+            position.x = offset * 2 * multiplier - 2;
+            if(i % 2 == 0)
+            {
+                offset++;
+            }
+            playerGO.transform.localPosition = position;
+        }
+        
     }
     
     public void OnSubmitAnswerButtonClicked(string answer)
     {
-        if (_currentSelectedQuestion == null)
+        if (_currentSelectedQuestionByPlayer == null)
         {
             return; // No question selected
         }
         
-        ReactEventHandler.UserAnsweredQuestion(_currentSelectedQuestion.QuestionData.uuid, answer);
+        ReactEventHandler.UserAnsweredQuestion(_currentSelectedQuestionByPlayer.QuestionData.uuid, answer);
         
-        _currentSelectedQuestion.SetWaitingForAnswer(true);
+        _currentSelectedQuestionByPlayer.SetWaitingForAnswer(true);
         
         OnNextQuestion();
     }
@@ -81,13 +111,13 @@ public class GameLogic: MonoBehaviour
     
     private void OnNextQuestion()
     {
-        if (_currentSelectedQuestion == null)
+        if (_currentSelectedQuestionByPlayer == null)
         {
             UpdateCurrentSelectedQuestion( _activeQuestions.Count > 0 ? _activeQuestions[0] : null);
         }
         else
         {
-            int index = _activeQuestions.IndexOf(_currentSelectedQuestion);
+            int index = _activeQuestions.IndexOf(_currentSelectedQuestionByPlayer);
             index++;
             index %= _activeQuestions.Count;
             UpdateCurrentSelectedQuestion( _activeQuestions.Count > index ? _activeQuestions[index] : null);
@@ -96,13 +126,13 @@ public class GameLogic: MonoBehaviour
 
     private void UpdateCurrentSelectedQuestion(QuestionGameObject questionGO)
     {
-        _currentSelectedQuestion = questionGO;
+        _currentSelectedQuestionByPlayer = questionGO;
         foreach (var q in _activeQuestions)
         {
-            q.SetSelected(q == _currentSelectedQuestion);
+            q.SetSelected(q == _currentSelectedQuestionByPlayer);
         }
         
-        OnQuestionSelectedAction?.Invoke(_currentSelectedQuestion != null ? _currentSelectedQuestion.QuestionData : null);
+        OnQuestionSelectedAction?.Invoke(_currentSelectedQuestionByPlayer != null ? _currentSelectedQuestionByPlayer.QuestionData : null);
     }
 
 
@@ -161,7 +191,7 @@ public class GameLogic: MonoBehaviour
             return;
         }
         
-        if (_currentSelectedQuestion == questionGO)
+        if (_currentSelectedQuestionByPlayer == questionGO)
         {
             UpdateCurrentSelectedQuestion(null);
         }
