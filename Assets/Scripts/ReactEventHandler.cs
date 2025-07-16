@@ -40,6 +40,16 @@ public class ReactEventHandler: MonoBehaviour
     // [ ] UserAnswerHandledByServer
     
     // Server -> Unity communication
+
+    public void HandleSessionStateUpdated(string json)
+    {
+        UI.Instance.ShowDebugText($"Received session state updated: {json}");
+        var sessionState = JsonUtility.FromJson<SessionStateUpdated>(json);
+        foreach (var user in sessionState.currentUsers)
+        {
+            gameLogic.CreatePlayer(user.userUuid, user.userUuid);
+        }
+    }
     
     public void HandleUserJoinedSession(string json)
     {
