@@ -7,10 +7,12 @@ namespace Data
     {
         
         public UserInfo[] currentUsers;
+        public string selfUserUuid;
 
         public SessionStateUpdated(UserInfo[] users)
         {
             this.currentUsers = users;
+            this.selfUserUuid = selfUserUuid;
         }
     }
 }

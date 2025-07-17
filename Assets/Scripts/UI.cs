@@ -55,11 +55,14 @@ public class UI: MonoBehaviour
         _timerTween?.Kill();
         _timerTween = null;
         
-        float interval = 0.1f; 
+        float interval = 0.1f;
         float totalDuration = data.timeToAnswer;
+        timerText.text = $"{totalDuration:F1} seconds remaining";
         int loops = Mathf.FloorToInt(totalDuration / interval);
+        
         _timerTween = DOVirtual.DelayedCall(interval, () =>
         {
+            totalDuration -= interval;
             timerText.text = $"{totalDuration:F1} seconds remaining";
         }).SetLoops(loops, LoopType.Restart);
         

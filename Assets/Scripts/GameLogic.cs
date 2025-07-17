@@ -26,7 +26,8 @@ public class GameLogic: MonoBehaviour
     {
         PlayerInput.OnNextQuestionAction += OnNextQuestion;
         PlayerInput.OnQuestionClickedAction += UpdateCurrentSelectedQuestion;
-        CreatePlayer("You", Guid.NewGuid().ToString());
+        // we will create user with real uuid in HandleSessionStateUpdated
+        // CreatePlayer("You", "SelfUuid");
     }
 
 

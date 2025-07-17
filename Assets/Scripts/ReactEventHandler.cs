@@ -47,7 +47,13 @@ public class ReactEventHandler: MonoBehaviour
         var sessionState = JsonUtility.FromJson<SessionStateUpdated>(json);
         foreach (var user in sessionState.currentUsers)
         {
-            gameLogic.CreatePlayer(user.userUuid, user.userUuid);
+            if (user.userUuid == sessionState.selfUserUuid)
+            // Change name for self and replace "You" user in players dictionary
+            {
+                gameLogic.CreatePlayer("You", user.userUuid);
+            } else {
+                gameLogic.CreatePlayer(user.userUuid, user.userUuid);
+            }
         }
     }
     

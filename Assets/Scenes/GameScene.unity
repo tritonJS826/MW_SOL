@@ -943,7 +943,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 4.4100037, y: 150.59}
+  m_AnchoredPosition: {x: 4.4100037, y: 135}
   m_SizeDelta: {x: 388.79, y: 91.36}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &916923258
@@ -1512,8 +1512,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.000030517578, y: 64.87207}
-  m_SizeDelta: {x: 222.6334, y: 41.743805}
+  m_AnchoredPosition: {x: 4.4100037, y: 47}
+  m_SizeDelta: {x: 388.79, y: 40.89}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1383415571
 MonoBehaviour:
@@ -1675,8 +1675,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 3122056714
+  m_fontColor: {r: 0.039566886, g: 0.8082707, b: 0.08545961, a: 0.7294118}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1878,7 +1878,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Submit answer
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
