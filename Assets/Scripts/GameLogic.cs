@@ -95,7 +95,10 @@ public class GameLogic: MonoBehaviour
     {
         if (questions == null || questions.questions == null || questions.questions.Length == 0)
         {
-           UI.Instance.ShowDebugText("No questions available to set up.");
+            questionList = new QuestionList { questions = new QuestionData[0] };
+            _currentQuestionIndex = 0;
+            UI.Instance.ShowDebugText("No questions available to set up.");
+            CheckForGameEnd();
             return;
         }
         
@@ -114,6 +117,31 @@ public class GameLogic: MonoBehaviour
         
         StopAllCoroutines();
         StartCoroutine(SpawnQuestions());
+    }
+
+    private bool CheckForGameEnd(bool callGameFinishedEvent = true)       
+    {                                                                     
+        // Game ends if:                                                  
+        // 1. All questions from the questionList have been spawned (_currentQuestionIndex has reached or exceeded list length)                 
+        // AND                                                            
+        // 2. There are no active questions left on screen (_activeQuestions list is empty)                                            
+
+        bool allQuestionsSpawned = (questionList == null)
+            || (questionList.questions == null)
+            || (_currentQuestionIndex >= questionList.questions.Length);
+        bool noActiveQuestions = _activeQuestions.Count == 0;
+               
+        if (allQuestionsSpawned && noActiveQuestions)                     
+        {                                                                 
+            UI.Instance.ShowDebugText("All questions processed (spawned and cleared). Game Finished!");                                             
+            if (callGameFinishedEvent)
+            {
+                ReactEventHandler.GameFinished();
+            }
+            StopAllCoroutines(); 
+            return true;
+        }
+        return false;
     }
     
     private void OnNextQuestion()
@@ -148,6 +176,11 @@ public class GameLogic: MonoBehaviour
         while (_currentQuestionIndex < questionList.questions.Length)
         {
             yield return new WaitForSeconds(_spawnInterval);
+
+            if (CheckForGameEnd(false))
+            {
+                yield break;
+            }
             QuestionData question = questionList.questions[_currentQuestionIndex];
             
             if (question != null)
@@ -171,6 +204,7 @@ public class GameLogic: MonoBehaviour
         Debug.Log($"Question answered: {questionGO.QuestionData.name}, Correct: {isCorrect}");
         RemoveQuestionObjectFromTheList(questionGO);
         questionGO.StopAndDestroy(isCorrect);
+        CheckForGameEnd();
     }
     
     private void OnQuestionExpired(QuestionGameObject questionGO)
@@ -184,10 +218,7 @@ public class GameLogic: MonoBehaviour
         questionGO.StopAllTwens();
         Destroy(questionGO.gameObject);
         
-        if(_activeQuestions.Count == 0)
-        {
-            ReactEventHandler.GameFinished();
-        }
+        CheckForGameEnd();
     }
 
     private void RemoveQuestionObjectFromTheList(QuestionGameObject questionGO)
