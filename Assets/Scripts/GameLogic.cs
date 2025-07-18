@@ -202,7 +202,7 @@ public class GameLogic: MonoBehaviour
     private void OnQuestionAnswered(QuestionGameObject questionGO, bool isCorrect)
     {
         Debug.Log($"Question answered: {questionGO.QuestionData.name}, Correct: {isCorrect}");
-        RemoveQuestionObjectFromTheList(questionGO);
+        RemoveQuestionObjectFromTheList(questionGO, true);
         questionGO.StopAndDestroy(isCorrect);
         CheckForGameEnd();
     }
@@ -221,27 +221,38 @@ public class GameLogic: MonoBehaviour
         CheckForGameEnd();
     }
 
-    private void RemoveQuestionObjectFromTheList(QuestionGameObject questionGO)
+    private void RemoveQuestionObjectFromTheList(QuestionGameObject questionGO, bool byPlayerAction = false)
     {
         if (questionGO == null)
         {
             Debug.LogError("QuestionGameObject is null in OnQuestionExpired");
             return;
         }
-        
-        if (_currentSelectedQuestionByPlayer == questionGO)
-        {
-            UpdateCurrentSelectedQuestion(null);
-        }
+
+        bool wasSelected = (_currentSelectedQuestionByPlayer == questionGO);
+
         _activeQuestions.Remove(questionGO);
-        
-        if (_activeQuestions.Count > 0)
-        {
-            UpdateCurrentSelectedQuestion(_activeQuestions[0]);
-        }
-        else
-        {
-            OnQuestionSelectedAction?.Invoke(null);
+
+        if (byPlayerAction || wasSelected)
+        {                                                                     
+            QuestionGameObject nextSelectedQuestion = null;                   
+                                                                              
+            if (_activeQuestions.Count > 0)                                   
+            {                                                                 
+                // If the currently selected question (before removal) is still valid and present,                                                    
+                // and it wasn't the one that just got removed (i.e., a non-selected question expired),                                                 
+                // then keep it selected to maintain focus.                   
+                if (!wasSelected && _currentSelectedQuestionByPlayer != null && _activeQuestions.Contains(_currentSelectedQuestionByPlayer))             
+                {                                                             
+                    nextSelectedQuestion = _currentSelectedQuestionByPlayer;  
+                }                                                             
+                else // Otherwise, select the first available question in the list    
+                {                                                             
+                    nextSelectedQuestion = _activeQuestions[0];               
+                }                                                             
+            }                                                                 
+            // Update the current selected question. If nextSelectedQuestion is null, it effectively deselects everything.                               
+            UpdateCurrentSelectedQuestion(nextSelectedQuestion);              
         }
     }
 }
