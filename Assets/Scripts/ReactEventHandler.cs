@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using Data;
 using UnityEngine;
@@ -5,16 +6,28 @@ using UnityEngine;
 public class ReactEventHandler: MonoBehaviour
 {
     [SerializeField] private GameLogic gameLogic;
+    [SerializeField] private TextAsset testJson;
+    
+    
+    public static Action<QuestionList> OnQuestionListSetUpAction;
+    
+    public static Action<string, string> OnPlayerJoinedAction;
 
+    
     private void Start()
     {
         UI.Instance.ShowDebugText("Started ");
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
-    GameStarted();
+        GameStarted();
         UI.Instance.ShowDebugText("Started game in ReactEventHandler");
 #endif
         
         GameLogic.OnQuestionSelectedAction += HandleQuestionSelected;
+#if UNITY_EDITOR == true
+        // For testing purposes, we can set up the question list directly
+        
+        HandleQuestionListReceived(testJson.text);
+#endif
     }
     
 
@@ -48,20 +61,21 @@ public class ReactEventHandler: MonoBehaviour
         foreach (var user in sessionState.currentUsers)
         {
             if (user.userUuid == sessionState.selfUserUuid)
-            // Change name for self and replace "You" user in players dictionary
             {
-                gameLogic.CreatePlayer("You", user.userUuid);
-            } else {
-                gameLogic.CreatePlayer(user.userUuid, user.userUuid);
+                OnPlayerJoinedAction?.Invoke("You", user.userUuid);
+            }
+            else
+            {
+                OnPlayerJoinedAction?.Invoke(user.userUuid, user.userUuid);
             }
         }
     }
-    
+
     public void HandleUserJoinedSession(string json)
     {
         UI.Instance.ShowDebugText($"Received user joined session: {json}");
         var user = JsonUtility.FromJson<UserJoinedSession>(json);
-        gameLogic.CreatePlayer(user.userUuid, user.userUuid);
+        OnPlayerJoinedAction?.Invoke(user.userUuid, user.userUuid);
     }
     
     public void HandleUserReadyToStartPlay(string json) // lobby
@@ -110,16 +124,17 @@ public class ReactEventHandler: MonoBehaviour
                 question.timeToAnswer = 60f;
             }
         }
-        gameLogic.SetUpQuestions(questionList);
+        OnQuestionListSetUpAction?.Invoke(questionList);
     }
     
     
     
-    private void HandleQuestionSelected(QuestionData questionData)
+    private void HandleQuestionSelected(QuestionData questionData, float remainingTime)
     {
         if (questionData == null) return;
-        
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
         UserCapturedTarget(questionData.uuid);
+#endif
     }
     
     private void OnDestroy()

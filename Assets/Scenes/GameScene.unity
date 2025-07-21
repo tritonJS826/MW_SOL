@@ -228,18 +228,18 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 401091723}
   - {fileID: 2050033524}
   - {fileID: 1971476057}
   - {fileID: 1383415570}
   - {fileID: 916923257}
-  - {fileID: 401091723}
   m_Father: {fileID: 1774822115}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.105}
-  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.5600586, y: 0.21069336}
-  m_SizeDelta: {x: 449.37, y: 0.40137}
-  m_Pivot: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 733.75494, y: 0.2109375}
+  m_SizeDelta: {x: -1470.63, y: 0.40137}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &134572692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,8 +498,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -783,7 +783,7 @@ GameObject:
   - component: {fileID: 712248248}
   - component: {fileID: 712248247}
   m_Layer: 5
-  m_Name: TimerText
+  m_Name: GlobalTimeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1329,6 +1329,7 @@ GameObject:
   - component: {fileID: 1236824842}
   - component: {fileID: 1236824841}
   - component: {fileID: 1236824843}
+  - component: {fileID: 1236824844}
   m_Layer: 0
   m_Name: SCRIPTS
   m_TagString: Untagged
@@ -1351,7 +1352,6 @@ MonoBehaviour:
   questionList:
     questions: []
   questionPrefab: {fileID: 1705699464307265903, guid: 5c91f1a9ccfc74d818a4ade038849eed, type: 3}
-  playerPrefab: {fileID: 1579823750127670206, guid: d85f4ff5241654e27ac9b9edd573f14f, type: 3}
 --- !u!4 &1236824842
 Transform:
   m_ObjectHideFlags: 0
@@ -1379,6 +1379,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3700131bc80e4c3fb049cc15bed0ebde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1236824844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236824840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09b32f8b24f7405c936aabaa74915d08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 1579823750127670206, guid: d85f4ff5241654e27ac9b9edd573f14f, type: 3}
 --- !u!1 &1312642321
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,6 +1422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameLogic: {fileID: 1236824841}
+  testJson: {fileID: 4900000, guid: b7f45df6aa7741c195ce74b5481a3fe3, type: 3}
 --- !u!4 &1312642323
 Transform:
   m_ObjectHideFlags: 0
@@ -1780,7 +1794,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0.90500003}
-  m_AnchoredPosition: {x: 0.00024414062, y: -0.13696289}
+  m_AnchoredPosition: {x: 0.00024414062, y: -0.13671875}
   m_SizeDelta: {x: 1469.16, y: -0.27001953}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1648701311
@@ -2077,7 +2091,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameLogic: {fileID: 1236824841}
-  timerText: {fileID: 712248247}
+  globalTimerText: {fileID: 712248247}
+  timerText: {fileID: 401091724}
   questionNameText: {fileID: 2050033525}
   questionText: {fileID: 1971476058}
   answerInputField: {fileID: 916923258}

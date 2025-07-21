@@ -1,0 +1,28 @@
+{
+  "questions": [
+    {
+      "answer": "Mount Everest",
+      "name": "Tallest Mountain",
+      "order": 1,
+      "questionText": "What is the highest mountain in the world?",
+      "uuid": "a1b2c3d4-e5f6-4789-abcd-1234567890ab",
+      "timeToAnswer": 30
+    },
+    {
+      "answer": "Pacific Ocean",
+      "name": "Largest Ocean",
+      "order": 2,
+      "questionText": "Which is the largest ocean on Earth?",
+      "uuid": "b2c3d4e5-f6a7-4890-bcde-234567890abc",
+      "timeToAnswer": 45
+    },
+    {
+      "answer": "Japan",
+      "name": "Land of the Rising Sun",
+      "order": 3,
+      "questionText": "Which country is known as the 'Land of the Rising Sun'?",                                                                     
+      "uuid": "c3d4e5f6-a7b8-4901-cdef-34567890abcd",
+      "timeToAnswer": 25
+    }
+  ]
+}
