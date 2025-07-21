@@ -60,10 +60,13 @@ public class GameLogic: MonoBehaviour
     {
         if (questions == null || questions.questions == null || questions.questions.Length == 0)
         {
+            questionList = new QuestionList { questions = new QuestionData[0] };
+            _currentQuestionIndex = 0;
             UI.Instance.ShowDebugText("No questions available to set up.");
+            CheckForGameEnd();
             return;
         }
-
+        
         questionList = questions;
         _currentQuestionIndex = 0;
         
@@ -79,6 +82,31 @@ public class GameLogic: MonoBehaviour
         
         StopAllCoroutines();
         StartCoroutine(SpawnQuestions());
+    }
+
+    private bool CheckForGameEnd(bool callGameFinishedEvent = true)       
+    {                                                                     
+        // Game ends if:                                                  
+        // 1. All questions from the questionList have been spawned (_currentQuestionIndex has reached or exceeded list length)                 
+        // AND                                                            
+        // 2. There are no active questions left on screen (_activeQuestions list is empty)                                            
+
+        bool allQuestionsSpawned = (questionList == null)
+            || (questionList.questions == null)
+            || (_currentQuestionIndex >= questionList.questions.Length);
+        bool noActiveQuestions = _activeQuestions.Count == 0;
+               
+        if (allQuestionsSpawned && noActiveQuestions)                     
+        {                                                                 
+            UI.Instance.ShowDebugText("All questions processed (spawned and cleared). Game Finished!");                                             
+            if (callGameFinishedEvent)
+            {
+                ReactEventHandler.GameFinished();
+            }
+            StopAllCoroutines(); 
+            return true;
+        }
+        return false;
     }
     
     private void OnNextQuestion()
@@ -114,6 +142,11 @@ public class GameLogic: MonoBehaviour
         while (_currentQuestionIndex < questionList.questions.Length)
         {
             yield return new WaitForSeconds(Game.TimeBetweenNextQuestion);
+
+            if (CheckForGameEnd(false))
+            {
+                yield break;
+            }
             QuestionData question = questionList.questions[_currentQuestionIndex];
             
             if (question != null)
@@ -135,8 +168,9 @@ public class GameLogic: MonoBehaviour
     private void OnQuestionAnswered(QuestionGameObject questionGO, bool isCorrect)
     {
         Debug.Log($"Question answered: {questionGO.QuestionData.name}, Correct: {isCorrect}");
-        RemoveQuestionObjectFromTheList(questionGO);
+        RemoveQuestionObjectFromTheList(questionGO, true);
         questionGO.StopAndDestroy(isCorrect);
+        CheckForGameEnd();
     }
     
     private void OnQuestionExpired(QuestionGameObject questionGO)
@@ -150,35 +184,42 @@ public class GameLogic: MonoBehaviour
         questionGO.StopAllTwens();
         Destroy(questionGO.gameObject);
         
-        if(_activeQuestions.Count == 0)
-        {
-#if UNITY_WEBGL == true && UNITY_EDITOR == false
-            ReactEventHandler.GameFinished();
-#endif
-        }
+ 
+        CheckForGameEnd();
     }
 
-    private void RemoveQuestionObjectFromTheList(QuestionGameObject questionGO)
+    private void RemoveQuestionObjectFromTheList(QuestionGameObject questionGO, bool byPlayerAction = false)
     {
         if (questionGO == null)
         {
             Debug.LogError("QuestionGameObject is null in OnQuestionExpired");
             return;
         }
-        
-        if (_currentSelectedQuestionByPlayer == questionGO)
-        {
-            UpdateCurrentSelectedQuestion(null);
-        }
+
+        bool wasSelected = (_currentSelectedQuestionByPlayer == questionGO);
+
         _activeQuestions.Remove(questionGO);
-        
-        if (_activeQuestions.Count > 0)
-        {
-            UpdateCurrentSelectedQuestion(_activeQuestions[0]);
-        }
-        else
-        {
-            OnQuestionSelectedAction?.Invoke(null,0f);
+
+        if (byPlayerAction || wasSelected)
+        {                                                                     
+            QuestionGameObject nextSelectedQuestion = null;                   
+                                                                              
+            if (_activeQuestions.Count > 0)                                   
+            {                                                                 
+                // If the currently selected question (before removal) is still valid and present,                                                    
+                // and it wasn't the one that just got removed (i.e., a non-selected question expired),                                                 
+                // then keep it selected to maintain focus.                   
+                if (!wasSelected && _currentSelectedQuestionByPlayer != null && _activeQuestions.Contains(_currentSelectedQuestionByPlayer))             
+                {                                                             
+                    nextSelectedQuestion = _currentSelectedQuestionByPlayer;  
+                }                                                             
+                else // Otherwise, select the first available question in the list    
+                {                                                             
+                    nextSelectedQuestion = _activeQuestions[0];               
+                }                                                             
+            }                                                                 
+            // Update the current selected question. If nextSelectedQuestion is null, it effectively deselects everything.                               
+            UpdateCurrentSelectedQuestion(nextSelectedQuestion);              
         }
     }
     
