@@ -133,7 +133,14 @@ public class GameLogic: MonoBehaviour
         }
         
         // TODO : importonant
-       // OnQuestionSelectedAction?.Invoke(_currentSelectedQuestionByPlayer != null ? _currentSelectedQuestionByPlayer.QuestionData : null);
+        
+        if (_currentSelectedQuestionByPlayer == null)
+        {
+            OnQuestionSelectedAction?.Invoke(null, 0);
+            return;
+        }
+        float remainingTime = _currentSelectedQuestionByPlayer.QuestionData.timeToAnswer;
+        OnQuestionSelectedAction?.Invoke(_currentSelectedQuestionByPlayer.QuestionData, remainingTime);
     }
 
 
