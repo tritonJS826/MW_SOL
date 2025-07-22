@@ -18,12 +18,8 @@ namespace UI_Scripts
         
         private void OnPlayerJoined(string name, string uuid)
         {
-            if (uuid == Game.playerId)
-            {
-                name = "You" + uuid;
-            }
             Color testColor = Color.HSVToRGB(Random.value, Random.value, 1f);   
-            AddPlayer(name,testColor);
+            AddPlayer(uuid,testColor);
         }
     
         public void AddPlayer(string userUuid, Color color)
