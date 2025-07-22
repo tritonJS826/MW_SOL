@@ -24,6 +24,7 @@ public class GameLogic: MonoBehaviour
         PlayerInput.OnNextQuestionAction += OnNextQuestion;
         PlayerInput.OnQuestionClickedAction += UpdateCurrentSelectedQuestion;
         ReactEventHandler.OnQuestionListSetUpAction += SetUpAllQuestions;
+        ReactEventHandler.OnServerSentAnswer += ServerSentQuestionAnswer;
     }
 
 
@@ -42,7 +43,7 @@ public class GameLogic: MonoBehaviour
         OnNextQuestion();
     }
 
-    public void ServerSentQuestionAnswer(UserAnswerHandledByServer userAnswer)
+    private void ServerSentQuestionAnswer(UserAnswerHandledByServer userAnswer)
     {
         DebugLog.Instance.AddText($"isOk: {userAnswer.isOk}, questionUuid: {userAnswer.questionUuid}, answer: {userAnswer.userAnswer} playerUuid: {userAnswer.userUuid}");
         DebugLog.Instance.AddText($"Server sent answer for question {userAnswer.questionUuid}: {userAnswer.isOk}");
@@ -236,5 +237,6 @@ public class GameLogic: MonoBehaviour
         PlayerInput.OnNextQuestionAction -= OnNextQuestion;
         PlayerInput.OnQuestionClickedAction -= UpdateCurrentSelectedQuestion;
         ReactEventHandler.OnQuestionListSetUpAction -= SetUpAllQuestions;
+        ReactEventHandler.OnServerSentAnswer -= ServerSentQuestionAnswer;
     }
 }

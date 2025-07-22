@@ -115,8 +115,7 @@ public class ReactEventHandler: MonoBehaviour
     public void HandleUserAnsweredQuestion(string json)
     {
         DebugLog.Instance.AddText($"User answered question: {json} ");
-        // UserCapturedTarget(questionUuid);
-        // UserAnsweredQuestion(questionUuid, userAnswer);
+       
     }
     
     
