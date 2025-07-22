@@ -14,4 +14,7 @@ mergeInto(LibraryManager.library, {
     UserCapturedTarget: function(questionUuid) {
         window.dispatchReactUnityEvent("UserCapturedTarget", UTF8ToString(questionUuid));
     },
+    UserReadyToStartPlay: function(userUuid) {
+         window.dispatchReactUnityEvent("UserReadyToStartPlay", UTF8ToString(userUuid));
+    },
 });

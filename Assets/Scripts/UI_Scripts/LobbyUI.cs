@@ -1,18 +1,52 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Runtime.InteropServices;
+using Data;
+using UnityEngine.UI;
 
 namespace UI_Scripts
 {
-    public class LobbyUI : MonoBehaviour
-    {
-
-        [DllImport("__Internal")]
-        public static extern void HostStartedGame();
-
+    public class LobbyUI: MonoBehaviour
+    { 
+        [SerializeField] private Toggle fullscreenToggle;
+        [SerializeField] private GameObject startButton;
+        [SerializeField] private GameObject readyButton;
+        
         public void OnPressButtonStartGame()
         {
-            HostStartedGame();
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+            ReactEventHandler.HostStartedGame();
+            return;
+#endif
+            SceneManager.LoadScene(1);
+        }
+        
+        private void Start()
+        {
+            ReactEventHandler.OnSessionStateUpdatedAction += OnSessionStateUpdate;
+        }
+
+        private void OnSessionStateUpdate(SessionStateUpdated state)
+        {
+            startButton.SetActive(state.selfUserUuid == state.userHostUuid);
+            readyButton.SetActive(state.selfUserUuid != state.userHostUuid);
+        }
+
+        public void OnButtonReadyClicked()
+        {
+            ReactEventHandler.UserReadyToStartPlay(Game.playerId);
+            readyButton.GetComponent<Button>().interactable = false;
+        }
+        
+        
+        public void OnFullScreeButtonSwitchValue()
+        {
+            Screen.fullScreen = !Screen.fullScreen;
+            fullscreenToggle.isOn = Screen.fullScreen;
+        }
+
+        private void OnDestroy()
+        {
+            ReactEventHandler.OnSessionStateUpdatedAction -= OnSessionStateUpdate;
         }
     }
 }

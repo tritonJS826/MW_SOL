@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UI_Scripts;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,18 +15,18 @@ public class PlayersManager: MonoBehaviour
         ReactEventHandler.OnPlayerJoinedAction += CreatePlayer;
     }
 
-    private void CreatePlayer(string name, string uuid)
+    private void CreatePlayer(string name, string userUuid)
     {
-        if (_players.ContainsKey(uuid))
+        if (_players.ContainsKey(userUuid))
         {
-            UI.Instance.ShowDebugText($"Player with uuid {uuid} already exists.");
+            DebugLog.Instance.AddText($"Player with uuid {userUuid} already exists.");
             return;
         }
         GameObject playerGO = Instantiate(playerPrefab, transform);
         PlayerInfo playerInfo = playerGO.GetComponent<PlayerInfo>();
         playerInfo.Initialize(name, Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.5f, 1f));
-        _players.Add(uuid, playerInfo);
-        UI.Instance.ShowDebugText($"Player created: {name}");
+        _players.Add(userUuid, playerInfo);
+        DebugLog.Instance.AddText($"Player created: {name}");
 
         int offset = 0;
         int i = 0;

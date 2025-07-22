@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Data;
 using UnityEngine;
 
 namespace UI_Scripts
@@ -14,17 +13,20 @@ namespace UI_Scripts
         
         private void Start()
         {
-            UserInfo testUser = new UserInfo("TestUser");
-            testUser.userUuid = "12345-67890";
-            Color testColor = Color.red;
-            AddPlayer(testUser, testColor);
-            testUser = new UserInfo("AnotherUser");
-            testUser.userUuid = "54321-09876";
-            testColor = Color.blue;
-            AddPlayer(testUser, testColor);
+            ReactEventHandler.OnPlayerJoinedAction += OnPlayerJoined;
+        }
+        
+        private void OnPlayerJoined(string name, string uuid)
+        {
+            if (uuid == Game.playerId)
+            {
+                name = "You" + uuid;
+            }
+            Color testColor = Color.HSVToRGB(Random.value, Random.value, 1f);   
+            AddPlayer(name,testColor);
         }
     
-        public void AddPlayer(UserInfo userInfo, Color color)
+        public void AddPlayer(string userUuid, Color color)
         {
             GameObject playerInfoObject = Instantiate(uiPlayerInfoPrefab, transform, false);
             float height = playerInfoObject.GetComponent<RectTransform>().sizeDelta.y;
@@ -34,7 +36,7 @@ namespace UI_Scripts
             if (playerInfoUI != null)
             {
                 int id = _playerInfoUIs.Count + 1;
-                playerInfoUI.Initialize(id, userInfo.userUuid, color, LobbyPlayerInfoUI.PlayerStatus.waiting);
+                playerInfoUI.Initialize(id, userUuid, color, LobbyPlayerInfoUI.PlayerStatus.waiting);
             }
             _playerInfoUIs.Add(playerInfoUI);
         }

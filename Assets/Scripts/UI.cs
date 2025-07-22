@@ -37,11 +37,6 @@ public class UI: MonoBehaviour
     {
         UpdateUI(null, 0);
     }
-
-    public void ShowDebugText(string text)
-    {
-        debugText.text = debugText.text + "\n\n" + text;
-    }
     
     private void SetUpGlobalTimer(QuestionList questionList)
     {

@@ -1,24 +1,29 @@
 using System;
 using System.Runtime.InteropServices;
 using Data;
+using UI_Scripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ReactEventHandler: MonoBehaviour
 {
-    [SerializeField] private GameLogic gameLogic;
-
     [SerializeField] private TextAsset testJson;
     
-    
     public static Action<QuestionList> OnQuestionListSetUpAction;
+    public static Action<UserAnswerHandledByServer> OnServerSentAnswer;
     
     public static Action<string, string> OnPlayerJoinedAction;
+    public static Action<SessionStateUpdated> OnSessionStateUpdatedAction;
 
-    
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     private void Start()
     {
-        UI.Instance.ShowDebugText("Started ");
+        DebugLog.Instance.AddText("Started ");
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
         GameStarted();
         UI.Instance.ShowDebugText("Started game in ReactEventHandler");
@@ -49,15 +54,24 @@ public class ReactEventHandler: MonoBehaviour
     [DllImport("__Internal")]
     public static extern void UserCapturedTarget(string questionUuid);
     
+    [DllImport("__Internal")]
+    public static extern void UserReadyToStartPlay(string userUuid);
     
+    
+    
+    
+    // React -> Unity communication
     public void HandleSessionStateUpdated(string json)
     {
-        UI.Instance.ShowDebugText($"Received session state updated: {json}");
+        DebugLog.Instance.AddText($"Received session state updated: {json}");
         var sessionState = JsonUtility.FromJson<SessionStateUpdated>(json);
+        OnSessionStateUpdatedAction?.Invoke(sessionState);
+        
         foreach (var user in sessionState.currentUsers)
         {
             if (user.userUuid == sessionState.selfUserUuid)
             {
+                Game.playerId = user.userUuid;
                 OnPlayerJoinedAction?.Invoke("You", user.userUuid);
             }
             else
@@ -69,21 +83,21 @@ public class ReactEventHandler: MonoBehaviour
 
     public void HandleUserJoinedSession(string json)
     {
-        UI.Instance.ShowDebugText($"Received user joined session: {json}");
+        DebugLog.Instance.AddText($"Received user joined session: {json}");
         var user = JsonUtility.FromJson<UserJoinedSession>(json);
         OnPlayerJoinedAction?.Invoke(user.userUuid, user.userUuid);
     }
     
     public void HandleUserReadyToStartPlay(string json) // lobby
     {
-        UI.Instance.ShowDebugText($"Received user ready to start play: {json}");
+        DebugLog.Instance.AddText($"Received user ready to start play: {json}");
         // var user = JsonUtility.FromJson<UserReadyToStartPlay>(json);
         // gameLogic.UserReadyToStartPlay(user);
     }
     
     public void HandleHostStartedGame(string json) // lobby
     {
-        UI.Instance.ShowDebugText($"Received host started game: {json}");
+        DebugLog.Instance.AddText($"Received host started game: {json}");
         SceneManager.LoadScene(1);
         // var host = JsonUtility.FromJson<HostStartedGame>(json);
         // gameLogic.HostStartedGame(host);
@@ -91,14 +105,14 @@ public class ReactEventHandler: MonoBehaviour
     
     public void HandleUserCapturedTarget(string json)
     {
-        UI.Instance.ShowDebugText($"Received user captured target: {json}");
+        DebugLog.Instance.AddText($"Received user captured target: {json}");
         // var userCapturedTarget = JsonUtility.FromJson<UserCapturedTarget>(json);
         // gameLogic.UserCapturedTarget(userCapturedTarget);
     }
     
     public void HandleUserAnsweredQuestion(string json)
     {
-        UI.Instance.ShowDebugText($"User answered question: {json} ");
+        DebugLog.Instance.AddText($"User answered question: {json} ");
         // UserCapturedTarget(questionUuid);
         // UserAnsweredQuestion(questionUuid, userAnswer);
     }
@@ -106,9 +120,9 @@ public class ReactEventHandler: MonoBehaviour
     
     public void HandleUserAnswerHandledByServer(string json)
     {
-        UI.Instance.ShowDebugText($"Received user answer from server: {json}");
+        DebugLog.Instance.AddText($"Received user answer from server: {json}");
         var userAnswer = JsonUtility.FromJson<UserAnswerHandledByServer>(json);
-        gameLogic.ServerSentQuestionAnswer(userAnswer);
+        OnServerSentAnswer?.Invoke(userAnswer);
     }
     
     public void HandleQuestionListReceived(string json)

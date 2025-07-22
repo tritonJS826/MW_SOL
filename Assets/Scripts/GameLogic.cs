@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Data;
+using UI_Scripts;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -43,13 +44,13 @@ public class GameLogic: MonoBehaviour
 
     public void ServerSentQuestionAnswer(UserAnswerHandledByServer userAnswer)
     {
-        UI.Instance.ShowDebugText($"isOk: {userAnswer.isOk}, questionUuid: {userAnswer.questionUuid}, answer: {userAnswer.userAnswer} playerUuid: {userAnswer.userUuid}");
-        UI.Instance.ShowDebugText($"Server sent answer for question {userAnswer.questionUuid}: {userAnswer.isOk}");
+        DebugLog.Instance.AddText($"isOk: {userAnswer.isOk}, questionUuid: {userAnswer.questionUuid}, answer: {userAnswer.userAnswer} playerUuid: {userAnswer.userUuid}");
+        DebugLog.Instance.AddText($"Server sent answer for question {userAnswer.questionUuid}: {userAnswer.isOk}");
         foreach (var questionGO in _activeQuestions)
         {
             if (questionGO.QuestionData.uuid == userAnswer.questionUuid)
             {
-                UI.Instance.ShowDebugText($"I found my gm: {questionGO.QuestionData.name} with answer: {userAnswer.isOk}");
+                DebugLog.Instance.AddText($"I found my gm: {questionGO.QuestionData.name} with answer: {userAnswer.isOk}");
                 OnQuestionAnswered(questionGO, userAnswer.isOk);
                 return;
             }
@@ -62,7 +63,7 @@ public class GameLogic: MonoBehaviour
         {
             questionList = new QuestionList { questions = new QuestionData[0] };
             _currentQuestionIndex = 0;
-            UI.Instance.ShowDebugText("No questions available to set up.");
+            DebugLog.Instance.AddText("No questions available to set up.");
             CheckForGameEnd();
             return;
         }
@@ -98,7 +99,7 @@ public class GameLogic: MonoBehaviour
                
         if (allQuestionsSpawned && noActiveQuestions)                     
         {                                                                 
-            UI.Instance.ShowDebugText("All questions processed (spawned and cleared). Game Finished!");                                             
+            DebugLog.Instance.AddText("All questions processed (spawned and cleared). Game Finished!");                                             
             if (callGameFinishedEvent)
             {
                 ReactEventHandler.GameFinished();
