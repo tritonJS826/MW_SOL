@@ -2,6 +2,9 @@ mergeInto(LibraryManager.library, {
     GameStarted: function() {
         window.dispatchReactUnityEvent("GameStarted");
     },
+    HostStartedGame: function() {
+        window.dispatchReactUnityEvent("HostStartedGame");
+    },
     GameFinished: function() {
         window.dispatchReactUnityEvent("GameFinished");
     },

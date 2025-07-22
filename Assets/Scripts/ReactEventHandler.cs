@@ -2,10 +2,12 @@ using System;
 using System.Runtime.InteropServices;
 using Data;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ReactEventHandler: MonoBehaviour
 {
     [SerializeField] private GameLogic gameLogic;
+
     [SerializeField] private TextAsset testJson;
     
     
@@ -36,6 +38,9 @@ public class ReactEventHandler: MonoBehaviour
     private static extern void GameStarted();
 
     [DllImport("__Internal")]
+    public static extern void HostStartedGame();
+
+    [DllImport("__Internal")]
     public static extern void GameFinished();
     
     [DllImport("__Internal")]
@@ -45,15 +50,6 @@ public class ReactEventHandler: MonoBehaviour
     public static extern void UserCapturedTarget(string questionUuid);
     
     
-    // [ ] UserJoinedSession
-    // [ ] UserReadyToStartPlay
-    // [ ] HostStartedGame
-    // [ ] UserCapturedTarget
-    // [ ] UserAnsweredQuestion
-    // [ ] UserAnswerHandledByServer
-    
-    // Server -> Unity communication
-
     public void HandleSessionStateUpdated(string json)
     {
         UI.Instance.ShowDebugText($"Received session state updated: {json}");
@@ -88,6 +84,7 @@ public class ReactEventHandler: MonoBehaviour
     public void HandleHostStartedGame(string json) // lobby
     {
         UI.Instance.ShowDebugText($"Received host started game: {json}");
+        SceneManager.LoadScene(1);
         // var host = JsonUtility.FromJson<HostStartedGame>(json);
         // gameLogic.HostStartedGame(host);
     }

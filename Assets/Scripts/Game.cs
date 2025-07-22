@@ -1,4 +1,4 @@
 public class Game
 {
-    public static readonly int TimeBetweenNextQuestion = 3;
+    public static readonly int TimeBetweenNextQuestion = 10;
 }
