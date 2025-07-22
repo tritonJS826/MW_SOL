@@ -14,6 +14,7 @@ public class ReactEventHandler: MonoBehaviour
     
     public static Action<string, string> OnPlayerJoinedAction;
     public static Action<SessionStateUpdated> OnSessionStateUpdatedAction;
+    public static Action<string> OnUserReadyToPlay;
 
 
     private void Awake()
@@ -92,8 +93,8 @@ public class ReactEventHandler: MonoBehaviour
     public void HandleUserReadyToStartPlay(string json) // lobby
     {
         DebugLog.Instance.AddText($"Received user ready to start play: {json}");
-        // var user = JsonUtility.FromJson<UserReadyToStartPlay>(json);
-        // gameLogic.UserReadyToStartPlay(user);
+        var user = JsonUtility.FromJson<UserReadyToStartPlay>(json);
+        OnUserReadyToPlay?.Invoke(user.userUuid);
     }
     
     public void HandleHostStartedGame(string json) // lobby

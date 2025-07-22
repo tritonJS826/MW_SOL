@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UI_Scripts
 {
@@ -14,6 +16,19 @@ namespace UI_Scripts
         private void Start()
         {
             ReactEventHandler.OnPlayerJoinedAction += OnPlayerJoined;
+            ReactEventHandler.OnUserReadyToPlay += OnUserReady;
+        }
+
+        private void OnUserReady(string userUuid)
+        {
+            foreach (var user in _playerInfoUIs)
+            {
+                if (user.GetUuid() == userUuid)
+                {
+                    user.ChangeStatus(LobbyPlayerInfoUI.PlayerStatus.ready);
+                    return;
+                }
+            }
         }
         
         private void OnPlayerJoined(string name, string uuid)
@@ -22,8 +37,16 @@ namespace UI_Scripts
             AddPlayer(uuid,testColor);
         }
     
-        public void AddPlayer(string userUuid, Color color)
+        private void AddPlayer(string userUuid, Color color)
         {
+            foreach (var pl in _playerInfoUIs)
+            {
+                if (pl.GetUuid() == userUuid)
+                {
+                    return;
+                }
+            }
+            
             GameObject playerInfoObject = Instantiate(uiPlayerInfoPrefab, transform, false);
             float height = playerInfoObject.GetComponent<RectTransform>().sizeDelta.y;
             float yPos = -height * _playerInfoUIs.Count - offset * _playerInfoUIs.Count;
@@ -35,6 +58,13 @@ namespace UI_Scripts
                 playerInfoUI.Initialize(id, userUuid, color, LobbyPlayerInfoUI.PlayerStatus.waiting);
             }
             _playerInfoUIs.Add(playerInfoUI);
+        }
+
+
+        private void OnDestroy()
+        {
+            ReactEventHandler.OnPlayerJoinedAction -= OnPlayerJoined;
+            ReactEventHandler.OnUserReadyToPlay -= OnUserReady;
         }
     }
 }

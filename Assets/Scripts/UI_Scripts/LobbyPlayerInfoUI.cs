@@ -15,6 +15,7 @@ namespace UI_Scripts
         [SerializeField] private Color readyColor;
         [SerializeField] private Color waitingColor;
 
+        private string userUuid;
         public enum PlayerStatus
         {
             ready,
@@ -23,6 +24,7 @@ namespace UI_Scripts
         
         public void Initialize(int num, string playerId, Color color, PlayerStatus status)
         {
+            userUuid = playerId;
             idText.text = num.ToString();
             playerNameText.text = playerId;
             statusText.text = status.ToString();
@@ -39,6 +41,11 @@ namespace UI_Scripts
         private void ChangeStatusTextColor(PlayerStatus status)
         {
             statusText.color = status == PlayerStatus.ready ? readyColor: waitingColor;
+        }
+
+        public string GetUuid()
+        {
+            return userUuid;
         }
         
     }
