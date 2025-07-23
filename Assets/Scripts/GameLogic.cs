@@ -37,7 +37,7 @@ public class GameLogic: MonoBehaviour
             return;
         }
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
-        ReactEventHandler.UserAnsweredQuestion(_currentSelectedQuestionByPlayer.QuestionData.uuid, answer);
+        ReactEventHandler.UserAnsweredQuestion(_selectedQuestions[Game.playerId].QuestionData.uuid, answer);
 #endif
         _selectedQuestions[Game.playerId].SetWaitingForAnswer(true);
         
