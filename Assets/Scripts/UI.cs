@@ -103,7 +103,7 @@ public class UI: MonoBehaviour
     public void OnSubmitAnswer()
     {
         string answer = answerInputField.text.Trim();
-        gameLogic.OnSubmitAnswerButtonClicked(answer);
+        gameLogic.OnSubmitAnswerButtonClicked(answer, Game.playerId);
         answerInputField.text = "";
         
         Debug.Log("Submitted answer: " + answer);

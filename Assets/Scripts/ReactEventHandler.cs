@@ -15,6 +15,7 @@ public class ReactEventHandler: MonoBehaviour
     public static Action<string, string> OnPlayerJoinedAction;
     public static Action<SessionStateUpdated> OnSessionStateUpdatedAction;
     public static Action<string> OnUserReadyToPlay;
+    public static Action<UserCapturedTarget> OnUserCapturedTargetAction;
 
 
     private void Awake()
@@ -107,9 +108,9 @@ public class ReactEventHandler: MonoBehaviour
     
     public void HandleUserCapturedTarget(string json)
     {
-        DebugLog.Instance.AddText($"Received user captured target: {json}");
-        // var userCapturedTarget = JsonUtility.FromJson<UserCapturedTarget>(json);
-        // gameLogic.UserCapturedTarget(userCapturedTarget);
+        DebugLog.Instance.AddText($"Received user captured target: {json}"); 
+        var userCapturedTarget = JsonUtility.FromJson<UserCapturedTarget>(json);
+        OnUserCapturedTargetAction?.Invoke(userCapturedTarget);
     }
     
     public void HandleUserAnsweredQuestion(string json)

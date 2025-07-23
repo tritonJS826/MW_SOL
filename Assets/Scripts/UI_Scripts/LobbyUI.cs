@@ -17,6 +17,8 @@ namespace UI_Scripts
             ReactEventHandler.HostStartedGame();
             return;
 #endif
+            Game.playerId = "Player";
+            Game.colorsForPlayers.Add(Game.playerId, Color.white);
             SceneManager.LoadScene(1);
         }
         

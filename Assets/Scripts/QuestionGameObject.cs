@@ -8,14 +8,13 @@ public class QuestionGameObject: MonoBehaviour
     [SerializeField] private QuestionData questionData;
     [SerializeField] private SpriteRenderer spriteRenderer;
     
-    private bool isWaitingForAnswer = false;
+    private bool _isWaitingForAnswer = false;
     
     private TweenCallback<QuestionGameObject> onCompleteCallback;
-
-
+    
     public QuestionData QuestionData => questionData;
-    
-    
+    private float _remainingTime;
+    private Tween _timerTween;
 
     public void Initialize(QuestionData data, TweenCallback<QuestionGameObject> onComplete = null)
     {
@@ -28,8 +27,16 @@ public class QuestionGameObject: MonoBehaviour
         transform.DOLocalMove(targetPosition, questionData.timeToAnswer, false)
             .SetEase(Ease.Linear)
             .OnComplete(() => { onCompleteCallback?.Invoke(this); });
-    }
 
+        _remainingTime = questionData.timeToAnswer;
+        int loops = Mathf.FloorToInt(questionData.timeToAnswer / 0.3f);
+        _timerTween?.Kill();
+        _timerTween = DOVirtual.DelayedCall(0.3f, () =>
+        {
+            _remainingTime -= 0.3f;
+        }).SetLoops(loops, LoopType.Restart);
+    }
+    
 
     public void SetSelected(bool isSelected)
     {
@@ -37,7 +44,12 @@ public class QuestionGameObject: MonoBehaviour
         {
             selectedVisual.SetActive(isSelected);
         }
-        
+    }
+    
+    public void SetSelected(bool isSelected, Color color)
+    {
+        SetSelected(isSelected);
+        selectedVisual.GetComponent<SpriteRenderer>().color = color;
     }
 
     public void StopAllTwens()
@@ -48,8 +60,8 @@ public class QuestionGameObject: MonoBehaviour
 
     public void SetWaitingForAnswer(bool isWaiting)
     {
-        isWaitingForAnswer = isWaiting;
-        spriteRenderer.color = isWaiting ? Color.yellow : Color.white;
+        _isWaitingForAnswer = isWaiting;
+        spriteRenderer.color = isWaiting ? Color.yellow: Color.white;
     }
     
     public void StopAndDestroy(bool isCorrect)
@@ -68,13 +80,20 @@ public class QuestionGameObject: MonoBehaviour
         }
         
         Destroy(gameObject, 1f); // Adjust the delay as needed
-        
     }
     
     public bool IsWaitingForAnswer()
     {
-        return isWaitingForAnswer;
+        return _isWaitingForAnswer;
     }
-    
 
+    public float GetRemainingTime()
+    {
+        return _remainingTime;
+    }
+
+    public QuestionData GetQuestionData()
+    {
+        return questionData;
+    }
 }

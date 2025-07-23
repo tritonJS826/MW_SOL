@@ -16,7 +16,7 @@ public class GameLogic: MonoBehaviour
     private int _currentQuestionIndex;
 
     private readonly List<QuestionGameObject> _activeQuestions = new();
-    private QuestionGameObject _currentSelectedQuestionByPlayer = null;
+    private Dictionary<string, QuestionGameObject> _selectedQuestions = new();
 
 
     private void Start()
@@ -25,22 +25,36 @@ public class GameLogic: MonoBehaviour
         PlayerInput.OnQuestionClickedAction += UpdateCurrentSelectedQuestion;
         ReactEventHandler.OnQuestionListSetUpAction += SetUpAllQuestions;
         ReactEventHandler.OnServerSentAnswer += ServerSentQuestionAnswer;
+        ReactEventHandler.OnUserCapturedTargetAction += OnSomePlayerSelectedTarget;
     }
 
 
-   
-    public void OnSubmitAnswerButtonClicked(string answer)
+
+    public void OnSubmitAnswerButtonClicked(string answer, string playerUuid)
     {
-        if (_currentSelectedQuestionByPlayer == null)
+        if (_selectedQuestions.ContainsKey(Game.playerId))
         {
             return;
         }
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
         ReactEventHandler.UserAnsweredQuestion(_currentSelectedQuestionByPlayer.QuestionData.uuid, answer);
 #endif
-        _currentSelectedQuestionByPlayer.SetWaitingForAnswer(true);
+        _selectedQuestions[Game.playerId].SetWaitingForAnswer(true);
         
         OnNextQuestion();
+    }
+
+    private void OnSomePlayerSelectedTarget(UserCapturedTarget target)
+    {
+        foreach (var gm in _activeQuestions)
+        {
+            if (gm.GetQuestionData().uuid == target.questionUuid)
+            {
+                //if(_selectedQuestions.)
+                _selectedQuestions[target.userUuid] = gm;
+                gm.SetSelected(true, Game.colorsForPlayers[target.userUuid]);
+            }
+        }
     }
 
     private void ServerSentQuestionAnswer(UserAnswerHandledByServer userAnswer)
@@ -58,11 +72,11 @@ public class GameLogic: MonoBehaviour
         }
     }
 
-    public void SetUpAllQuestions(QuestionList questions)
+    private void SetUpAllQuestions(QuestionList questions)
     {
         if (questions == null || questions.questions == null || questions.questions.Length == 0)
         {
-            questionList = new QuestionList { questions = new QuestionData[0] };
+            questionList = new QuestionList { questions = Array.Empty<QuestionData>() };
             _currentQuestionIndex = 0;
             DebugLog.Instance.AddText("No questions available to set up.");
             CheckForGameEnd();
@@ -113,13 +127,14 @@ public class GameLogic: MonoBehaviour
     
     private void OnNextQuestion()
     {
-        if (_currentSelectedQuestionByPlayer == null)
+        if (!_selectedQuestions.ContainsKey(Game.playerId))
         {
             UpdateCurrentSelectedQuestion( _activeQuestions.Count > 0 ? _activeQuestions[0] : null);
         }
         else
         {
-            int index = _activeQuestions.IndexOf(_currentSelectedQuestionByPlayer);
+            int index = _activeQuestions.FindIndex(data => data.GetQuestionData().uuid ==
+                                                           _selectedQuestions[Game.playerId].GetQuestionData().uuid);
             index++;
             index %= _activeQuestions.Count;
             UpdateCurrentSelectedQuestion( _activeQuestions.Count > index ? _activeQuestions[index] : null);
@@ -128,21 +143,25 @@ public class GameLogic: MonoBehaviour
 
     private void UpdateCurrentSelectedQuestion(QuestionGameObject questionGO)
     {
-        _currentSelectedQuestionByPlayer = questionGO;
-        foreach (var q in _activeQuestions)
+        if (_selectedQuestions.ContainsKey(Game.playerId))
         {
-            q.SetSelected(q == _currentSelectedQuestionByPlayer);
+            _selectedQuestions[Game.playerId].SetSelected(false);
         }
+        _selectedQuestions[Game.playerId] = questionGO;
+        Color color = Game.colorsForPlayers[Game.playerId];
+        _selectedQuestions[Game.playerId].SetSelected(true, color);
+
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+        ReactEventHandler.UserCapturedTarget(questionGO.GetQuestionData().uuid);
+#endif
         
-        // TODO : importonant
-        
-        if (_currentSelectedQuestionByPlayer == null)
+        if (questionGO == null)
         {
             OnQuestionSelectedAction?.Invoke(null, 0);
             return;
         }
-        float remainingTime = _currentSelectedQuestionByPlayer.QuestionData.timeToAnswer;
-        OnQuestionSelectedAction?.Invoke(_currentSelectedQuestionByPlayer.QuestionData, remainingTime);
+        
+        OnQuestionSelectedAction?.Invoke(questionGO.QuestionData, questionGO.GetRemainingTime());
     }
 
 
@@ -205,11 +224,11 @@ public class GameLogic: MonoBehaviour
             return;
         }
 
-        bool wasSelected = (_currentSelectedQuestionByPlayer == questionGO);
+        bool wasSelectedByPlayer = questionGO == _selectedQuestions[Game.playerId];
 
         _activeQuestions.Remove(questionGO);
 
-        if (byPlayerAction || wasSelected)
+        if (byPlayerAction || wasSelectedByPlayer)
         {                                                                     
             QuestionGameObject nextSelectedQuestion = null;                   
                                                                               
@@ -218,9 +237,9 @@ public class GameLogic: MonoBehaviour
                 // If the currently selected question (before removal) is still valid and present,                                                    
                 // and it wasn't the one that just got removed (i.e., a non-selected question expired),                                                 
                 // then keep it selected to maintain focus.                   
-                if (!wasSelected && _currentSelectedQuestionByPlayer != null && _activeQuestions.Contains(_currentSelectedQuestionByPlayer))             
+                if (!wasSelectedByPlayer && _selectedQuestions[Game.playerId] != null && _activeQuestions.Contains(_selectedQuestions[Game.playerId]))             
                 {                                                             
-                    nextSelectedQuestion = _currentSelectedQuestionByPlayer;  
+                    nextSelectedQuestion = _selectedQuestions[Game.playerId];  
                 }                                                             
                 else // Otherwise, select the first available question in the list    
                 {                                                             

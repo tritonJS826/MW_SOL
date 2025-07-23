@@ -33,11 +33,10 @@ namespace UI_Scripts
         
         private void OnPlayerJoined(string name, string uuid)
         {
-            Color testColor = Color.HSVToRGB(Random.value, Random.value, 1f);   
-            AddPlayer(uuid,testColor);
+            AddPlayer(uuid);
         }
     
-        private void AddPlayer(string userUuid, Color color)
+        private void AddPlayer(string userUuid)
         {
             foreach (var pl in _playerInfoUIs)
             {
@@ -46,6 +45,8 @@ namespace UI_Scripts
                     return;
                 }
             }
+            Color color = Color.HSVToRGB(Random.value, Random.value, 1f);
+            Game.colorsForPlayers[userUuid] = color;
             
             GameObject playerInfoObject = Instantiate(uiPlayerInfoPrefab, transform, false);
             float height = playerInfoObject.GetComponent<RectTransform>().sizeDelta.y;
