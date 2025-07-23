@@ -47,6 +47,10 @@ public class GameLogic: MonoBehaviour
 
     private void OnSomePlayerSelectedTarget(UserCapturedTarget target)
     {
+        if (target.userUuid == Game.playerId)
+        {
+            return;
+        }
         foreach (var gm in _activeQuestions)
         {
             if (gm.GetQuestionData().uuid == target.questionUuid)
