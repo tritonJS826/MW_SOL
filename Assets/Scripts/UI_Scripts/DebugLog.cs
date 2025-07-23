@@ -27,6 +27,11 @@ namespace UI_Scripts
         {
             debugLog.text += text + "\n";
         }
+
+        public void Clear()
+        {
+            debugLog.text = " ";
+        }
         
     }
 }

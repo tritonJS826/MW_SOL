@@ -21,6 +21,7 @@ public class GameLogic: MonoBehaviour
 
     private void Start()
     {
+        DebugLog.Instance.Clear();
         PlayerInput.OnNextQuestionAction += OnNextQuestion;
         PlayerInput.OnQuestionClickedAction += UpdateCurrentSelectedQuestion;
         ReactEventHandler.OnQuestionListSetUpAction += SetUpAllQuestions;
@@ -153,6 +154,7 @@ public class GameLogic: MonoBehaviour
         _selectedQuestions[Game.playerId].SetSelected(true, color);
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
         ReactEventHandler.UserCapturedTarget(questionGO.GetQuestionData().uuid);
+       
          DebugLog.Instance.AddText("I SENDIN_EVENT  " + questionGO.GetQuestionData().uuid + "  " + Game.playerId );
 #endif
         
