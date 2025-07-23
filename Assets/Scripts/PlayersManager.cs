@@ -24,7 +24,7 @@ public class PlayersManager: MonoBehaviour
         }
         GameObject playerGO = Instantiate(playerPrefab, transform);
         PlayerInfo playerInfo = playerGO.GetComponent<PlayerInfo>();
-        playerInfo.Initialize(name, Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.5f, 1f));
+        playerInfo.Initialize(name, Game.colorsForPlayers[userUuid]);
         _players.Add(userUuid, playerInfo);
         DebugLog.Instance.AddText($"Player created: {name}");
 
