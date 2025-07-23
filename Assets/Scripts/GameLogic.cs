@@ -50,7 +50,7 @@ public class GameLogic: MonoBehaviour
         {
             if (gm.GetQuestionData().uuid == target.questionUuid)
             {
-                //if(_selectedQuestions.)
+                _selectedQuestions[target.userUuid].SetSelected(false);
                 _selectedQuestions[target.userUuid] = gm;
                 gm.SetSelected(true, Game.colorsForPlayers[target.userUuid]);
             }
@@ -150,7 +150,6 @@ public class GameLogic: MonoBehaviour
         _selectedQuestions[Game.playerId] = questionGO;
         Color color = Game.colorsForPlayers[Game.playerId];
         _selectedQuestions[Game.playerId].SetSelected(true, color);
-
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
         ReactEventHandler.UserCapturedTarget(questionGO.GetQuestionData().uuid);
 #endif
