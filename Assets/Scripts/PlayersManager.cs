@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UI_Scripts;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class PlayersManager: MonoBehaviour
 {

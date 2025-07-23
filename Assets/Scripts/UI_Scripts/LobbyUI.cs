@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Data;
+using TMPro;
 using UnityEngine.UI;
 
 namespace UI_Scripts
@@ -10,6 +11,7 @@ namespace UI_Scripts
         [SerializeField] private Toggle fullscreenToggle;
         [SerializeField] private GameObject startButton;
         [SerializeField] private GameObject readyButton;
+        [SerializeField] private TMP_Text sessionIdText;
         
         public void OnPressButtonStartGame()
         {
@@ -29,6 +31,7 @@ namespace UI_Scripts
 
         private void OnSessionStateUpdate(SessionStateUpdated state)
         {
+            sessionIdText.text = state.shareUrl;
             startButton.SetActive(state.selfUserUuid == state.userHostUuid);
             readyButton.SetActive(state.selfUserUuid != state.userHostUuid);
         }

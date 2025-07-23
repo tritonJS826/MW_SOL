@@ -1103,7 +1103,7 @@ GameObject:
   - component: {fileID: 609569726}
   - component: {fileID: 609569725}
   m_Layer: 5
-  m_Name: GameIdText
+  m_Name: SessionGameIdText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1125,8 +1125,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 716, y: 444}
-  m_SizeDelta: {x: 420.54, y: 65.6218}
+  m_AnchoredPosition: {x: 708.8, y: 393.1671}
+  m_SizeDelta: {x: 434.94, y: 133.21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &609569725
 MonoBehaviour:
@@ -1183,7 +1183,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1213,7 +1213,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 125.53418, y: 0, z: 0, w: 0}
+  m_margin: {x: -0.63830566, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1528,6 +1528,7 @@ MonoBehaviour:
   fullscreenToggle: {fileID: 9720383}
   startButton: {fileID: 129195978}
   readyButton: {fileID: 722594263}
+  sessionIdText: {fileID: 609569725}
 --- !u!4 &785002484
 Transform:
   m_ObjectHideFlags: 0
@@ -1622,8 +1623,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 647.67993, y: 445.59998}
-  m_SizeDelta: {x: 320.353, y: 55.9958}
+  m_AnchoredPosition: {x: 421, y: 448.81}
+  m_SizeDelta: {x: 140.6534, y: 55.9958}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &960472406
 MonoBehaviour:
@@ -1710,7 +1711,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 192.67358, w: 0}
+  m_margin: {x: 0, y: 0, z: 0.005859375, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

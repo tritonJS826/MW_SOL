@@ -8,5 +8,6 @@ namespace Data
         public UserInfo[] currentUsers;
         public string selfUserUuid;
         public string userHostUuid;
+        public string shareUrl;
     }
 }
