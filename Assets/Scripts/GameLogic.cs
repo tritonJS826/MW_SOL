@@ -31,7 +31,7 @@ public class GameLogic: MonoBehaviour
 
     public void OnSubmitAnswerButtonClicked(string answer, string playerUuid)
     {
-        if (_selectedQuestions.ContainsKey(Game.playerId))
+        if (!_selectedQuestions.ContainsKey(Game.playerId))
         {
             return;
         }
