@@ -45,7 +45,8 @@ namespace UI_Scripts
                     return;
                 }
             }
-            Color color = Color.HSVToRGB(Random.value, Random.value, 1f);
+
+            Color color = new Color(Random.value, Random.value, Random.value, 1);
             Game.colorsForPlayers[userUuid] = color;
             
             GameObject playerInfoObject = Instantiate(uiPlayerInfoPrefab, transform, false);
