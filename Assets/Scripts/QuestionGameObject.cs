@@ -1,5 +1,6 @@
 using Data;
 using DG.Tweening;
+using UI_Scripts;
 using UnityEngine;
 
 public class QuestionGameObject: MonoBehaviour
@@ -40,6 +41,7 @@ public class QuestionGameObject: MonoBehaviour
 
     public void SetSelected(bool isSelected)
     {
+        DebugLog.Instance.AddText("GM set selected " + isSelected);
         if (selectedVisual != null)
         {
             selectedVisual.SetActive(isSelected);
@@ -66,7 +68,7 @@ public class QuestionGameObject: MonoBehaviour
     
     public void StopAndDestroy(bool isCorrect)
     {
-        Debug.Log("#QGM action StopAndDestroy");
+        DebugLog.Instance.AddText("#QGM action StopAndDestroy");
         StopAllTwens();
         
         if (isCorrect)
