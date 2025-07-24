@@ -23,13 +23,11 @@ public class GameLogic: MonoBehaviour
     {
         DebugLog.Instance.Clear();
         PlayerInput.OnNextQuestionAction += OnNextQuestion;
-        PlayerInput.OnQuestionClickedAction += UpdateCurrentSelectedQuestion;
+        PlayerInput.OnQuestionClickedAction += UpdateCurrentSelectedQuestionByPlayer;
         ReactEventHandler.OnQuestionListSetUpAction += SetUpAllQuestions;
         ReactEventHandler.OnServerSentAnswer += ServerSentQuestionAnswer;
         ReactEventHandler.OnUserCapturedTargetAction += OnSomePlayerSelectedTarget;
     }
-
-
 
     public void OnSubmitAnswerButtonClicked(string answer, string playerUuid)
     {
@@ -41,7 +39,6 @@ public class GameLogic: MonoBehaviour
         ReactEventHandler.UserAnsweredQuestion(_selectedQuestions[Game.playerId].QuestionData.uuid, answer);
 #endif
         _selectedQuestions[Game.playerId].SetWaitingForAnswer(true);
-        
         OnNextQuestion();
     }
 
@@ -135,7 +132,7 @@ public class GameLogic: MonoBehaviour
     {
         if (!_selectedQuestions.ContainsKey(Game.playerId))
         {
-            UpdateCurrentSelectedQuestion( _activeQuestions.Count > 0 ? _activeQuestions[0] : null);
+            UpdateCurrentSelectedQuestionByPlayer( _activeQuestions.Count > 0 ? _activeQuestions[0] : null);
         }
         else
         {
@@ -143,11 +140,11 @@ public class GameLogic: MonoBehaviour
                                                            _selectedQuestions[Game.playerId].GetQuestionData().uuid);
             index++;
             index %= _activeQuestions.Count;
-            UpdateCurrentSelectedQuestion( _activeQuestions.Count > index ? _activeQuestions[index] : null);
+            UpdateCurrentSelectedQuestionByPlayer( _activeQuestions.Count > index ? _activeQuestions[index] : null);
         }
     }
 
-    private void UpdateCurrentSelectedQuestion(QuestionGameObject questionGO)
+    private void UpdateCurrentSelectedQuestionByPlayer(QuestionGameObject questionGO)
     {
         if (_selectedQuestions.ContainsKey(Game.playerId))
         {
@@ -158,8 +155,7 @@ public class GameLogic: MonoBehaviour
         _selectedQuestions[Game.playerId].SetSelected(true, color);
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
         ReactEventHandler.UserCapturedTarget(questionGO.GetQuestionData().uuid);
-       
-         DebugLog.Instance.AddText("I SENDIN_EVENT  " + questionGO.GetQuestionData().uuid + "  " + Game.playerId );
+        //DebugLog.Instance.AddText("I SENDIN_EVENT  " + questionGO.GetQuestionData().uuid + "  " + Game.playerId );
 #endif
         
         if (questionGO == null)
@@ -218,7 +214,6 @@ public class GameLogic: MonoBehaviour
         RemoveQuestionObjectFromTheList(questionGO);
         questionGO.StopAllTwens();
         Destroy(questionGO.gameObject);
-        
  
         CheckForGameEnd();
     }
@@ -254,14 +249,14 @@ public class GameLogic: MonoBehaviour
                 }                                                             
             }                                                                 
             // Update the current selected question. If nextSelectedQuestion is null, it effectively deselects everything.                               
-            UpdateCurrentSelectedQuestion(nextSelectedQuestion);              
+            UpdateCurrentSelectedQuestionByPlayer(nextSelectedQuestion);              
         }
     }
     
     private void OnDestroy()
     {
         PlayerInput.OnNextQuestionAction -= OnNextQuestion;
-        PlayerInput.OnQuestionClickedAction -= UpdateCurrentSelectedQuestion;
+        PlayerInput.OnQuestionClickedAction -= UpdateCurrentSelectedQuestionByPlayer;
         ReactEventHandler.OnQuestionListSetUpAction -= SetUpAllQuestions;
         ReactEventHandler.OnServerSentAnswer -= ServerSentQuestionAnswer;
     }

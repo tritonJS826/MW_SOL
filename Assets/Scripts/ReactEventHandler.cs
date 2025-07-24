@@ -32,7 +32,7 @@ public class ReactEventHandler: MonoBehaviour
         GameStarted();
 #endif
         
-        GameLogic.OnQuestionSelectedAction += HandleQuestionSelected;
+        //GameLogic.OnQuestionSelectedAction += HandleQuestionSelected;
 #if UNITY_EDITOR == true
         // For testing purposes, we can set up the question list directly
         
@@ -152,7 +152,7 @@ public class ReactEventHandler: MonoBehaviour
     
     private void OnDestroy()
     {
-        GameLogic.OnQuestionSelectedAction -= HandleQuestionSelected;
+     //   GameLogic.OnQuestionSelectedAction -= HandleQuestionSelected;
     }
   
 }
