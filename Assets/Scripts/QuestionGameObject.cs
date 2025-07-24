@@ -66,6 +66,7 @@ public class QuestionGameObject: MonoBehaviour
     
     public void StopAndDestroy(bool isCorrect)
     {
+        Debug.Log("#QGM action StopAndDestroy");
         StopAllTwens();
         
         if (isCorrect)

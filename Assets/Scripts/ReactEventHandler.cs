@@ -66,7 +66,7 @@ public class ReactEventHandler: MonoBehaviour
     // React -> Unity communication
     public void HandleSessionStateUpdated(string json)
     {
-        DebugLog.Instance.AddText($"Received session state updated: {json}");
+        DebugLog.Instance.AddText($"#SERVER Received session state updated");
         var sessionState = JsonUtility.FromJson<SessionStateUpdated>(json);
         OnSessionStateUpdatedAction?.Invoke(sessionState);
         
@@ -86,21 +86,21 @@ public class ReactEventHandler: MonoBehaviour
 
     public void HandleUserJoinedSession(string json)
     {
-        DebugLog.Instance.AddText($"Received user joined session: {json}");
+        DebugLog.Instance.AddText($"#SERVER Received user joined session");
         var user = JsonUtility.FromJson<UserJoinedSession>(json);
         OnPlayerJoinedAction?.Invoke(user.userUuid, user.userUuid);
     }
     
     public void HandleUserReadyToStartPlay(string json) // lobby
     {
-        DebugLog.Instance.AddText($"Received user ready to start play: {json}");
+        DebugLog.Instance.AddText($"#SERVER Received user ready to start play");
         var user = JsonUtility.FromJson<UserReadyToStartPlay>(json);
         OnUserReadyToPlay?.Invoke(user.userUuid);
     }
     
     public void HandleHostStartedGame(string json) // lobby
     {
-        DebugLog.Instance.AddText($"Received host started game: {json}");
+         DebugLog.Instance.AddText($"#SERVER Received host started game");
         SceneManager.LoadScene(1);
         // var host = JsonUtility.FromJson<HostStartedGame>(json);
         // gameLogic.HostStartedGame(host);
@@ -108,21 +108,21 @@ public class ReactEventHandler: MonoBehaviour
     
     public void HandleUserCapturedTarget(string json)
     {
-        DebugLog.Instance.AddText($"Received user captured target: {json}"); 
+        DebugLog.Instance.AddText($"#SERVER Received user captured target"); 
         var userCapturedTarget = JsonUtility.FromJson<UserCapturedTarget>(json);
         OnUserCapturedTargetAction?.Invoke(userCapturedTarget);
     }
     
     public void HandleUserAnsweredQuestion(string json)
     {
-        DebugLog.Instance.AddText($"User answered question: {json} ");
+        DebugLog.Instance.AddText($"#SERVER User answered question");
        
     }
     
     
     public void HandleUserAnswerHandledByServer(string json)
     {
-        DebugLog.Instance.AddText($"Received user answer from server: {json}");
+        DebugLog.Instance.AddText($"#SERVER Received user answer from server");
         var userAnswer = JsonUtility.FromJson<UserAnswerHandledByServer>(json);
         OnServerSentAnswer?.Invoke(userAnswer);
     }

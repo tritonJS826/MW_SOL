@@ -62,13 +62,11 @@ public class GameLogic: MonoBehaviour
 
     private void ServerSentQuestionAnswer(UserAnswerHandledByServer userAnswer)
     {
-        //DebugLog.Instance.AddText($"isOk: {userAnswer.isOk}, questionUuid: {userAnswer.questionUuid}, answer: {userAnswer.userAnswer} playerUuid: {userAnswer.userUuid}");
-        DebugLog.Instance.AddText($"Server sent answer for question {userAnswer.questionUuid}: {userAnswer.isOk}");
         foreach (var questionGO in _activeQuestions)
         {
             if (questionGO.QuestionData.uuid == userAnswer.questionUuid)
             {
-                DebugLog.Instance.AddText($"I found my gm: {questionGO.QuestionData.name} with answer: {userAnswer.isOk}");
+                DebugLog.Instance.AddText($"I found gm: {questionGO.QuestionData.name}");
                 OnQuestionAnswered(questionGO, userAnswer.isOk);
                 return;
             }
@@ -155,7 +153,7 @@ public class GameLogic: MonoBehaviour
         _selectedQuestions[Game.playerId].SetSelected(true, color);
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
         ReactEventHandler.UserCapturedTarget(questionGO.GetQuestionData().uuid);
-        DebugLog.Instance.AddText("I SENDIN_EVENT  " + questionGO.GetQuestionData().uuid + "  " + Game.playerId );
+        DebugLog.Instance.AddText("#Unity I sent event " + questionGO.GetQuestionData().uuid + "  " + Game.playerId );
 #endif
         
         if (questionGO == null)
@@ -198,7 +196,6 @@ public class GameLogic: MonoBehaviour
     
     private void OnQuestionAnswered(QuestionGameObject questionGO, bool isCorrect)
     {
-        Debug.Log($"Question answered: {questionGO.QuestionData.name}, Correct: {isCorrect}");
         RemoveQuestionObjectFromTheList(questionGO, true);
         questionGO.StopAndDestroy(isCorrect);
         CheckForGameEnd();
@@ -226,8 +223,7 @@ public class GameLogic: MonoBehaviour
             return;
         }
 
-        bool wasSelectedByPlayer = questionGO == _selectedQuestions[Game.playerId];
-
+        bool wasSelectedByPlayer = (questionGO.GetQuestionData().uuid == _selectedQuestions[Game.playerId].GetQuestionData().uuid);
         _activeQuestions.Remove(questionGO);
 
         if (byPlayerAction || wasSelectedByPlayer)
