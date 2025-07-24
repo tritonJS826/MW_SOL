@@ -48,13 +48,17 @@ public class GameLogic: MonoBehaviour
         {
             return;
         }
+        
         foreach (var gm in _activeQuestions)
         {
             if (gm.GetQuestionData().uuid == target.questionUuid)
             {
-                DebugLog.Instance.AddText("MakeUnselected " + target.questionUuid + "  " + gm.GetQuestionData().uuid );
-                _selectedQuestions[target.questionUuid].SetSelected(false);
-                _selectedQuestions[target.questionUuid] = gm;
+                DebugLog.Instance.AddText("I found question " + target.questionUuid + "  " + gm.GetQuestionData().uuid );
+                if (_selectedQuestions[target.userUuid] != null)
+                {
+                    _selectedQuestions[target.userUuid].SetSelected(false);
+                }
+                _selectedQuestions[target.userUuid] = gm;
                 gm.SetSelected(true, Game.colorsForPlayers[target.userUuid]);
             }
         }
