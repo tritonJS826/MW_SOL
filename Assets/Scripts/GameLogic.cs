@@ -62,7 +62,7 @@ public class GameLogic: MonoBehaviour
 
     private void ServerSentQuestionAnswer(UserAnswerHandledByServer userAnswer)
     {
-        DebugLog.Instance.AddText($"isOk: {userAnswer.isOk}, questionUuid: {userAnswer.questionUuid}, answer: {userAnswer.userAnswer} playerUuid: {userAnswer.userUuid}");
+        //DebugLog.Instance.AddText($"isOk: {userAnswer.isOk}, questionUuid: {userAnswer.questionUuid}, answer: {userAnswer.userAnswer} playerUuid: {userAnswer.userUuid}");
         DebugLog.Instance.AddText($"Server sent answer for question {userAnswer.questionUuid}: {userAnswer.isOk}");
         foreach (var questionGO in _activeQuestions)
         {
@@ -155,7 +155,7 @@ public class GameLogic: MonoBehaviour
         _selectedQuestions[Game.playerId].SetSelected(true, color);
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
         ReactEventHandler.UserCapturedTarget(questionGO.GetQuestionData().uuid);
-        //DebugLog.Instance.AddText("I SENDIN_EVENT  " + questionGO.GetQuestionData().uuid + "  " + Game.playerId );
+        DebugLog.Instance.AddText("I SENDIN_EVENT  " + questionGO.GetQuestionData().uuid + "  " + Game.playerId );
 #endif
         
         if (questionGO == null)
