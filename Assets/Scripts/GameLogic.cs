@@ -52,9 +52,9 @@ public class GameLogic: MonoBehaviour
         {
             if (gm.GetQuestionData().uuid == target.questionUuid)
             {
-                DebugLog.Instance.AddText("MakeUnselected " + target.userUuid + "  " + gm.GetQuestionData().uuid );
-                _selectedQuestions[target.userUuid].SetSelected(false);
-                _selectedQuestions[target.userUuid] = gm;
+                DebugLog.Instance.AddText("MakeUnselected " + target.questionUuid + "  " + gm.GetQuestionData().uuid );
+                _selectedQuestions[target.questionUuid].SetSelected(false);
+                _selectedQuestions[target.questionUuid] = gm;
                 gm.SetSelected(true, Game.colorsForPlayers[target.userUuid]);
             }
         }
