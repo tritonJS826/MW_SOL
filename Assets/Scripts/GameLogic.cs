@@ -57,10 +57,29 @@ public class GameLogic: MonoBehaviour
                 if (_selectedQuestions.ContainsKey(target.userUuid) && _selectedQuestions[target.userUuid] != null)
                 {
                     DebugLog.Instance.AddText("#Found selected before");
-                    _selectedQuestions[target.userUuid].SetSelected(false);
+                    QuestionGameObject qgm = _selectedQuestions[target.userUuid];
+                    qgm.SetSelected(false);
+                    CheckObjectForOtherSelections(qgm, target.userUuid);
                 }
                 _selectedQuestions[target.userUuid] = gm;
                 gm.SetSelected(true, Game.colorsForPlayers[target.userUuid]);
+            }
+        }
+    }
+
+    private void CheckObjectForOtherSelections(QuestionGameObject gm, string exceptUser)
+    {
+        foreach (var key in _selectedQuestions)
+        {
+            if (key.Key == exceptUser)
+            {
+                continue;
+            }
+
+            if (key.Value.GetQuestionData().uuid == gm.GetQuestionData().uuid)
+            {
+                gm.SetSelected(true,Game.colorsForPlayers[key.Key]);
+                return;
             }
         }
     }
