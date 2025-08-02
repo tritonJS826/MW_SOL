@@ -54,7 +54,7 @@ public class GameLogic: MonoBehaviour
             if (gm.GetQuestionData().uuid == target.questionUuid)
             {
                 DebugLog.Instance.AddText("I found question " + target.questionUuid + "  " + gm.GetQuestionData().uuid );
-                if (_selectedQuestions.ContainsKey(target.userUuid) || _selectedQuestions[target.userUuid] != null)
+                if (_selectedQuestions.ContainsKey(target.userUuid) && _selectedQuestions[target.userUuid] != null)
                 {
                     DebugLog.Instance.AddText("#Found selected before");
                     _selectedQuestions[target.userUuid].SetSelected(false);
