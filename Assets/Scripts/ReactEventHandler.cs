@@ -75,11 +75,11 @@ public class ReactEventHandler: MonoBehaviour
             if (user.userUuid == sessionState.selfUserUuid)
             {
                 Game.playerId = user.userUuid;
-                OnPlayerJoinedAction?.Invoke("You", user.userUuid);
+                OnPlayerJoinedAction?.Invoke(user.userName, user.userUuid);
             }
             else
             {
-                OnPlayerJoinedAction?.Invoke(user.userUuid, user.userUuid);
+                OnPlayerJoinedAction?.Invoke(user.userName, user.userUuid);
             }
         }
     }
@@ -88,7 +88,7 @@ public class ReactEventHandler: MonoBehaviour
     {
         DebugLog.Instance.AddText($"#SERVER Received user joined session");
         var user = JsonUtility.FromJson<UserJoinedSession>(json);
-        OnPlayerJoinedAction?.Invoke(user.userUuid, user.userUuid);
+        OnPlayerJoinedAction?.Invoke(user.userName, user.userUuid);
     }
     
     public void HandleUserReadyToStartPlay(string json) // lobby

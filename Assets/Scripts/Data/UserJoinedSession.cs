@@ -6,5 +6,7 @@ namespace Data
     public class UserJoinedSession
     {
         public string userUuid;
+
+        public string userName;
     }
 }

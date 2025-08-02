@@ -33,10 +33,10 @@ namespace UI_Scripts
         
         private void OnPlayerJoined(string name, string uuid)
         {
-            AddPlayer(uuid);
+            AddPlayer(name, uuid);
         }
     
-        private void AddPlayer(string userUuid)
+        private void AddPlayer(string userName, string userUuid)
         {
             foreach (var pl in _playerInfoUIs)
             {
@@ -57,6 +57,7 @@ namespace UI_Scripts
             if (playerInfoUI != null)
             {
                 int id = _playerInfoUIs.Count + 1;
+                // TODO: if you will replace userUuid on userName here - duplicate of playerInfoUI appears in the lobby
                 playerInfoUI.Initialize(id, userUuid, color, LobbyPlayerInfoUI.PlayerStatus.waiting);
             }
             _playerInfoUIs.Add(playerInfoUI);
