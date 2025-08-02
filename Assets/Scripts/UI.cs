@@ -61,6 +61,7 @@ public class UI: MonoBehaviour
             totalTime += Game.TimeBetweenNextQuestion;
         }
         totalTime += maxRemainingQuestionTime;
+        totalTime -= Game.TimeBetweenNextQuestion;
         
         int loops = Mathf.FloorToInt(totalTime / 0.3f);
         _globalTimerTween?.Kill();

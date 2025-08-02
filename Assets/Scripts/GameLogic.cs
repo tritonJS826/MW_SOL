@@ -142,7 +142,9 @@ public class GameLogic: MonoBehaviour
             DebugLog.Instance.AddText("All questions processed (spawned and cleared). Game Finished!");                                             
             if (callGameFinishedEvent)
             {
+#if UNITY_WEBGL == true && UNITY_EDITOR == false 
                 ReactEventHandler.GameFinished();
+#endif
             }
             StopAllCoroutines(); 
             return true;
@@ -170,13 +172,16 @@ public class GameLogic: MonoBehaviour
     {
         if (_selectedQuestions.ContainsKey(Game.playerId))
         {
-            
             _selectedQuestions[Game.playerId].SetSelected(false);
             CheckObjectForOtherSelections(_selectedQuestions[Game.playerId], Game.playerId);
         }
+        
         _selectedQuestions[Game.playerId] = questionGO;
-        Color color = Game.colorsForPlayers[Game.playerId];
-        _selectedQuestions[Game.playerId].SetSelected(true, color);
+        if (_selectedQuestions[Game.playerId] != null)
+        {
+            Color color = Game.colorsForPlayers[Game.playerId];
+            _selectedQuestions[Game.playerId].SetSelected(true, color);
+        }
 #if UNITY_WEBGL == true && UNITY_EDITOR == false
         ReactEventHandler.UserCapturedTarget(questionGO.GetQuestionData().uuid);
         DebugLog.Instance.AddText("#Unity I sent event " + questionGO.GetQuestionData().uuid + "  " + Game.playerId );
@@ -236,7 +241,7 @@ public class GameLogic: MonoBehaviour
         
         RemoveQuestionObjectFromTheList(questionGO);
         questionGO.StopAllTwens();
-        Destroy(questionGO.gameObject);
+        questionGO.StopAndDestroy(false);
  
         CheckForGameEnd();
     }
