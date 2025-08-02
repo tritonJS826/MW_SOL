@@ -170,7 +170,9 @@ public class GameLogic: MonoBehaviour
     {
         if (_selectedQuestions.ContainsKey(Game.playerId))
         {
+            
             _selectedQuestions[Game.playerId].SetSelected(false);
+            CheckObjectForOtherSelections(_selectedQuestions[Game.playerId], Game.playerId);
         }
         _selectedQuestions[Game.playerId] = questionGO;
         Color color = Game.colorsForPlayers[Game.playerId];
