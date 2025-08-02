@@ -239,6 +239,10 @@ public class GameLogic: MonoBehaviour
             return;
         }
         
+#if UNITY_WEBGL == true && UNITY_EDITOR == false
+        ReactEventHandler.UserAnsweredQuestion(_selectedQuestions[Game.playerId].QuestionData.uuid, "I don't know! :(");
+#endif
+        
         RemoveQuestionObjectFromTheList(questionGO);
         questionGO.StopAllTwens();
         questionGO.StopAndDestroy(false);

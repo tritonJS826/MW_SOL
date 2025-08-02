@@ -23,6 +23,11 @@ namespace UI_Scripts
             Game.colorsForPlayers.Add(Game.playerId, Color.white);
             SceneManager.LoadScene(1);
         }
+
+        public void OnLinkButtonClicked()
+        {
+            GUIUtility.systemCopyBuffer = sessionIdText.text;
+        }
         
         private void Start()
         {
