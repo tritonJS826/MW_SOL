@@ -22,11 +22,11 @@ namespace UI_Scripts
             waiting
         }
         
-        public void Initialize(int num, string playerId, Color color, PlayerStatus status)
+        public void Initialize(int num, string playerId, string playerName, Color color, PlayerStatus status)
         {
             userUuid = playerId;
             idText.text = num.ToString();
-            playerNameText.text = playerId;
+            playerNameText.text = playerName;
             statusText.text = status.ToString();
             ChangeStatusTextColor(status);
             playerColor.color = color;

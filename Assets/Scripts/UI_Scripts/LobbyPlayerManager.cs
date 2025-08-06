@@ -58,7 +58,7 @@ namespace UI_Scripts
             {
                 int id = _playerInfoUIs.Count + 1;
                 // TODO: if you will replace userUuid on userName here - duplicate of playerInfoUI appears in the lobby
-                playerInfoUI.Initialize(id, userUuid, color, LobbyPlayerInfoUI.PlayerStatus.waiting);
+                playerInfoUI.Initialize(id, userUuid, userName, color, LobbyPlayerInfoUI.PlayerStatus.waiting);
             }
             _playerInfoUIs.Add(playerInfoUI);
         }
